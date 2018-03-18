@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../../../favicon.ico">
+
+    <!--<title>Signin Template for Bootstrap</title>-->
+
+    <!-- Bootstrap core CSS -->
+    <link href="../bootstrap-4.0.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="signin.css" rel="stylesheet">
+  </head>
+
+  <body class="text-center">
+
+  <script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
+  <script src="/__/firebase/4.10.1/firebase-database.js"></script>
+  <script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyCiQT5GwokZG5DaiBgTkuD-X6g-6pxQorM",
+    authDomain: "inf551-ea04d.firebaseapp.com",
+    databaseURL: "https://inf551-ea04d.firebaseio.com",
+    projectId: "inf551-ea04d",
+    storageBucket: "inf551-ea04d.appspot.com",
+    messagingSenderId: "169971146672"
+  };
+  firebase.initializeApp(config);
+  var database = firebase.database();
+
+  function writeUserData() {
+    var email = document.getElementById('inputEmail').value();
+    var password = document.getElementById('inputPassword').value();
+    firebase.database().ref('inf551-ea04d/person0').set({
+    email: email,
+    password: password
+  });
+}
+</script>
+
+    <form class="form-signin">
+      <img class="mb-4" src="usc.png" alt="" width="72" height="72">
+      <h1 class="h3 mb-3 font-weight-normal">Please Sign Up</h1>
+      <label for="inputEmail" class="sr-only">Email address</label>
+      <input type="email" name = "email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+      <label for="inputPassword" class="sr-only">Password</label>
+      <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+      <div class="checkbox mb-3">
+        <label>
+          <input type="checkbox" value="remember-me"> Remember me
+        </label>
+      </div>
+      <button class="btn btn-lg btn-primary btn-block" onclick="writeUserData()" type="submit">Sign Up</button>
+      <!--<p class="mt-5 mb-3 text-muted">&copy; 2017-2018</p> 
+<script>
+      var email = document.getElementById('inputEmail').value();
+      var password = document.getElementById('inputPassword').value();
+      writeUserData(email, password);
+      </script>
+      
+      -->
+    </form>
+  </body>
+  </html>
+
+</html>

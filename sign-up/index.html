@@ -23,12 +23,12 @@
   <script>
   // Initialize Firebase
   var config = {
-    apiKey: "AIzaSyCiQT5GwokZG5DaiBgTkuD-X6g-6pxQorM",
-    authDomain: "inf551-ea04d.firebaseapp.com",
-    databaseURL: "https://inf551-ea04d.firebaseio.com",
-    projectId: "inf551-ea04d",
-    storageBucket: "inf551-ea04d.appspot.com",
-    messagingSenderId: "169971146672"
+    apiKey: "AIzaSyD_HuGwLAWRkG8hdgJ3ZZ1uP0PRtmp2mRI",
+    authDomain: "inf551uscstudent.firebaseapp.com",
+    databaseURL: "https://inf551uscstudent.firebaseio.com",
+    projectId: "inf551uscstudent",
+    storageBucket: "inf551uscstudent.appspot.com",
+    messagingSenderId: "72153677100"
   };
   firebase.initializeApp(config);
   var database = firebase.database();
@@ -36,7 +36,7 @@
   function writeUserData() {
     var email = document.getElementById('inputEmail').value();
     var password = document.getElementById('inputPassword').value();
-    firebase.database().ref('inf551-ea04d/person0').set({
+    firebase.database().ref().set({
     email: email,
     password: password
   });

@@ -32,9 +32,9 @@
   };
   firebase.initializeApp(config);
   var database = firebase.database();
-  var email = document.getElementById('inputEmail').value;
-  var user = email.substr(0, email.indexOf('@'));
-  var ref = firebase.database().ref("kxu582");
+  var email = document.getElementById('inputEmail');
+  //var user = email.substr(0, email.indexOf('@'));
+  var ref = firebase.database().ref(String(email.value));
 function ReadFirebaseData() {
     ref.on("value", function(snapshot) {
     var arr = snapshot.val();

@@ -35,13 +35,11 @@
   var ref = firebase.database().ref();
   function writeUserData() {
 
-    var existUsers;
     ref.on("value", function(snapshot) {
     var arr = snapshot.val();
     //key
     var arr2 = Object.keys(arr);
-    existUsers=arr2;
-    console.log(existUsers)
+    console.log(arr2)
     //console.log(arr);
     //console.log(arr2);
     //password

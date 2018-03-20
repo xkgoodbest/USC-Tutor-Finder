@@ -32,8 +32,10 @@
   };
   firebase.initializeApp(config);
   var database = firebase.database();
-  var ref = firebase.database().ref();
-  function ReadFirebaseData() {
+  var email = document.getElementById('inputEmail').value;
+  var user = email.substr(0, email.indexOf('@'));
+  var ref = firebase.database().ref("kxu582");
+function ReadFirebaseData() {
     ref.on("value", function(snapshot) {
     var arr = snapshot.val();
     //key
@@ -42,9 +44,9 @@
     //password
     }
     );
-
 }
 ReadFirebaseData()
+
 </script>
 
     <form class="form-signin">
@@ -59,7 +61,7 @@ ReadFirebaseData()
           <input type="checkbox" value="remember-me"> Remember me
         </label>
       </div>
-      <button class="btn btn-lg btn-primary btn-block" onclick="ReadFirebaseData()" type="submit">Sign In</button>
+      <button class="btn btn-lg btn-primary btn-block"  type="submit">Sign In</button>
       
     </form>
   </body>

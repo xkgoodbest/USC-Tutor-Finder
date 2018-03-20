@@ -32,11 +32,11 @@
   };
   firebase.initializeApp(config);
   var database = firebase.database();
-
   function writeUserData() {
     var email = document.getElementById('inputEmail').value;
     var password = document.getElementById('inputPassword').value;
-    firebase.database().ref("ppp").set({
+    var user = email.substr(0, email.indexOf('@'));
+    firebase.database().ref(String(user)).set({
     email: email,
     password: password
   });
@@ -47,9 +47,9 @@
       <img class="mb-4" src="usc.png" alt="" width="72" height="72">
       <h1 class="h3 mb-3 font-weight-normal">Please Sign Up</h1>
       <label for="inputEmail" class="sr-only">Email address</label>
-      <input type="email" name = "email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+      <input type="email" name = "email" id="inputEmail" pattern=".+@usc.edu" class="form-control" required title="123@usc.edu" placeholder="123@usc.edu" required autofocus>
       <label for="inputPassword" class="sr-only">Password</label>
-      <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+      <input type="password" id="inputPassword" pattern=".{8,12}" required title="8 to 12 characters" class="form-control" placeholder="8 to 12 characters" required>
       <div class="checkbox mb-3">
         <label>
           <input type="checkbox" value="remember-me"> Remember me

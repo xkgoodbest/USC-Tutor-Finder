@@ -32,14 +32,28 @@
   };
   firebase.initializeApp(config);
   var database = firebase.database();
+  var ref = firebase.database().ref();
   function writeUserData() {
+
+    var existUsers;
+    ref.on("value", function(snapshot) {
+    var arr = snapshot.val();
+    //key
+    var arr2 = Object.keys(arr);
+    existUsers=arr2;
+    console.log(existUsers)
+    //console.log(arr);
+    //console.log(arr2);
+    //password
+    }
+    );
+    
     var email = document.getElementById('inputEmail').value;
     var password = document.getElementById('inputPassword').value;
-    var user = email.substr(0, email.indexOf('@'));
-    firebase.database().ref(String(user)).set({
-    email: email,
-    password: password
-  });
+    if(password.length<=12&&password.length>=8){
+      var user = email.substr(0, email.indexOf('@'));
+      firebase.database().ref(String(user)).set({email: email,password: password});
+    }
 }
 </script>
 

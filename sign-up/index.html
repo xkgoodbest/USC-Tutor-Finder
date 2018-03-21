@@ -33,23 +33,28 @@
   firebase.initializeApp(config);
   var database = firebase.database();
   var ref = firebase.database().ref();
+
+  
   function writeUserData() {
 
+    var email = document.getElementById('inputEmail').value;
+    var user = email.substr(0, email.indexOf('@'));
+    var postfix = email.split("@")[1];
+    var userExist
     ref.on("value", function(snapshot) {
     var arr = snapshot.val();
-    //key
     var arr2 = Object.keys(arr);
     console.log(arr2)
+    userExist=arr2.indexOf(user)
+    console.log(postfix)
     //console.log(arr);
     //console.log(arr2);
-    //password
     }
     );
     
-    var email = document.getElementById('inputEmail').value;
+    
     var password = document.getElementById('inputPassword').value;
-    if(password.length<=12&&password.length>=8){
-      var user = email.substr(0, email.indexOf('@'));
+    if(password.length<=12&&password.length>=8&&userExist==-1&& postfix=="usc.edu"){
       firebase.database().ref(String(user)).set({email: email,password: password});
     }
 }

@@ -36,7 +36,6 @@
 
   
   function writeUserData() {
-
     var email = document.getElementById('inputEmail').value;
     var user = email.substr(0, email.indexOf('@'));
     var postfix = email.split("@")[1];
@@ -44,18 +43,27 @@
     ref.on("value", function(snapshot) {
     var arr = snapshot.val();
     var arr2 = Object.keys(arr);
-    console.log(arr2)
-    userExist=arr2.indexOf(user)
-    console.log(postfix)
+    console.log(arr2);
+    userExist=arr2.indexOf(user);
+    //alert(userExist);
     //console.log(arr);
     //console.log(arr2);
     }
     );
-    
-    
+    sleep(1000);
     var password = document.getElementById('inputPassword').value;
     if(password.length<=12&&password.length>=8&&userExist==-1&& postfix=="usc.edu"){
       firebase.database().ref(String(user)).set({email: email,password: password});
+      alert("You're signed up! Enjoy your study!");
+    }
+    else if(userExist!=-1){
+      alert("User already exists!");
+    }
+    else if(postfix!="usc.edu"){
+      alert("Please use USC email to sign up!");
+    }
+    else{
+      alert("Invalid password!");
     }
 }
 </script>

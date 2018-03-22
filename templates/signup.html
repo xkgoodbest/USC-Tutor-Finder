@@ -38,17 +38,26 @@
   	var password = document.getElementById('inputPassword').value;
 $.ajax({
   type : 'POST',
-  url : "/signup",
+  url : "/receiver",
   contentType: 'application/json;charset=UTF-8',
   data: JSON.stringify({"email":email,"password":password}),
-  
+  complete: function(r){
+       if (r.responseText=="1"){
+       	var user = email.substr(0, email.indexOf('@'));
+       	alert("You are signed up successfully as "+user);
+       	firebase.database().ref(String(user)).set({email: email,password: password});
+       }
+       else{
+       	alert("You must use unused USC email to sign up. Password length must be betewwn 8 and 12 characters!")
+       }
+    }
 });
 }
 </script>
 
     <form class="form-signin">
       <img class="mb-4" src="/static/usc.png" alt="" width="72" height="72">
-      <h1 class="h3 mb-3 font-weight-normal">Please Sign Up!!!!!</h1>
+      <h1 class="h3 mb-3 font-weight-normal">Please Sign Up</h1>
       <label for="inputEmail" class="sr-only">Email address</label>
       <input type="email" name = "email" id="inputEmail" pattern=".+@uc.e" class="form-control" required title="123@usc.edu" placeholder="123@usc.edu" required autofocus>
       <label for="inputPassword" class="sr-only">Password</label>
@@ -59,7 +68,7 @@ $.ajax({
         </label>
       </div>
       <button class="btn btn-lg btn-primary btn-block" onclick="writeUserData()" type="submit">Sign Up</button>
-      <button class="btn btn-lg btn-primary btn-block"> <a href='signup'>test</a></button>
+      
     </form>
   </body>
   </html>

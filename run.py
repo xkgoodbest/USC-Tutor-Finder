@@ -2,7 +2,7 @@
 import json
 import sys
 from firebase import firebase
-from flask import Flask, render_template, request, redirect, Response
+from flask import Flask, render_template, request, redirect, Response,url_for
 import random, json
 
 app = Flask(__name__)
@@ -33,6 +33,10 @@ def worker():
 			permit='0'
 	else: permit='0'
 	return permit
+
+@app.route('/signup')
+def red():
+	return render_template('signup.html',name='Joe!')
 
 if __name__ == '__main__':
 	# run!

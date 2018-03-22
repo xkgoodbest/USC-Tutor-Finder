@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="usc.png">
+
+    <!--<title>Signin Template for Bootstrap</title>-->
+
+    <!-- Bootstrap core CSS -->
+    <link href="../bootstrap-4.0.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="signin.css" rel="stylesheet">
+  </head>
+
+  <body class="text-center">
+
+  <script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
+  <script src="/__/firebase/4.10.1/firebase-database.js"></script>
+  <script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyD_HuGwLAWRkG8hdgJ3ZZ1uP0PRtmp2mRI",
+    authDomain: "inf551uscstudent.firebaseapp.com",
+    databaseURL: "https://inf551uscstudent.firebaseio.com",
+    projectId: "inf551uscstudent",
+    storageBucket: "inf551uscstudent.appspot.com",
+    messagingSenderId: "72153677100"
+  };
+  firebase.initializeApp(config);
+  var database = firebase.database();
+  var ref = firebase.database().ref();
+
+  
+  function writeUserData() {
+    var email = document.getElementById('inputEmail').value;
+    var user = email.substr(0, email.indexOf('@'));
+    var postfix = email.split("@")[1];
+    var userExist
+    ref.on("value", function(snapshot) {
+    var arr = snapshot.val();
+    var arr2 = Object.keys(arr);
+    console.log(arr2);
+    userExist=arr2.indexOf(user);
+    }
+    );
+    var password = document.getElementById('inputPassword').value;
+    if(password.length<=12&&password.length>=8&&userExist==-1&& postfix=="usc.edu"){
+      firebase.database().ref(String(user)).set({email: email,password: password});
+      alert("You're signed up! Enjoy your study!");
+    }
+    else if(userExist!=-1){
+      alert("User already exists!");
+    }
+    else if(postfix!="usc.edu"){
+      alert("Please use USC email to sign up!");
+    }
+    else{
+      alert("Invalid password!");
+    }
+}
+</script>
+
+    <form class="form-signin">
+      <img class="mb-4" src="usc.png" alt="" width="72" height="72">
+      <h1 class="h3 mb-3 font-weight-normal">Please Sign Up</h1>
+      <label for="inputEmail" class="sr-only">Email address</label>
+      <input type="email" name = "email" id="inputEmail" pattern=".+@usc.edu" class="form-control" required title="123@usc.edu" placeholder="123@usc.edu" required autofocus>
+      <label for="inputPassword" class="sr-only">Password</label>
+      <input type="password" id="inputPassword" pattern=".{8,12}" required title="8 to 12 characters" class="form-control" placeholder="8 to 12 characters" required>
+      <div class="checkbox mb-3">
+        <label>
+          <input type="checkbox" value="remember-me"> Remember me
+        </label>
+      </div>
+      <button class="btn btn-lg btn-primary btn-block" onclick="writeUserData()" type="submit">Sign Up</button>
+      
+    </form>
+  </body>
+  </html>
+
+</html>

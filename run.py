@@ -14,13 +14,10 @@ def output():
 
 @app.route('/receiver', methods = ['POST'])
 def worker():
-	# read json + reply
-	data1 = request.data
-	result = ''
-	#for item in data1:
-	#	result += str(item['make']) + '\n'
-
-	return data1
+	data1 = request.json
+	#username=data1['email'].split('@')[0]
+	print data1
+	return 'data1'
 
 if __name__ == '__main__':
 	# run!

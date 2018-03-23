@@ -50,22 +50,25 @@ def signin():
 		postfix=data1['email'].split("@")[1]		
 		firebase1 = firebase.FirebaseApplication('https://inf551uscstudent.firebaseio.com', None)
 		result = firebase1.get(user, None)
-		if str(result['password'])==str(data1['password']):
-			permit=user
-		if postfix!='usc.edu':
-			permit='0'
-		if len(data1['email'].split("@"))!=2:
-			permit='0'
+		if result:
+			if str(result['password'])==str(data1['password']) :
+				permit=user
+			if postfix!='usc.edu':
+				permit='0'
+			if len(data1['email'].split("@"))!=2:
+				permit='0'
+	print permit
 	if permit !='0':
 		session['signin'] = True
 		session['username'] = user
+
 	return permit
 
 #sign out		
 @app.route('/signout')
 def signout():
 	session.clear()
-	return redirect(url_for('/'))
+	return redirect(url_for('redToIn'))
 
 @app.route('/signup')
 def redToUp():

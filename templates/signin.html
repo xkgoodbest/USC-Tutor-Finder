@@ -46,12 +46,12 @@ $.ajax({
        if (r.responseText!="0"){
         var user = email.substr(0, email.indexOf('@'));
         alert("You are signed in successfully as "+user);
+        //location.href="/search?user="+this.user;
        }
        else{
         alert("Login failed!")
        }
     }
-  
 });
 }
 </script>

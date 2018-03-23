@@ -14,8 +14,9 @@
     <!-- Custom styles for this template -->
     <link href="{{url_for('static',filename='styles/signin.css')}}" rel="stylesheet">
   </head>
+    <body style="width:100%;background:url('static/inup.jpg');background-size: cover;">
 
-  <body class="text-center">
+  <body class="text-center" >
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
 
@@ -38,9 +39,18 @@
   	var password = document.getElementById('inputPassword').value;
 $.ajax({
   type : 'POST',
-  url : "/signup",
+  url : "/login",
   contentType: 'application/json;charset=UTF-8',
   data: JSON.stringify({"email":email,"password":password}),
+  complete: function(r){
+       if (r.responseText!="0"){
+        var user = email.substr(0, email.indexOf('@'));
+        alert("You are signed in successfully as "+user);
+       }
+       else{
+        alert("Login failed!")
+       }
+    }
   
 });
 }
@@ -48,7 +58,7 @@ $.ajax({
 
     <form class="form-signin">
       <img class="mb-4" src="/static/usc.png" alt="" width="72" height="72">
-      <h1 class="h3 mb-3 font-weight-normal">Please Sign Up!!!!!</h1>
+      <h1 class="h3 mb-3 font-weight-normal">Please Sign In</h1>
       <label for="inputEmail" class="sr-only">Email address</label>
       <input type="email" name = "email" id="inputEmail" pattern=".+@uc.e" class="form-control" required title="123@usc.edu" placeholder="123@usc.edu" required autofocus>
       <label for="inputPassword" class="sr-only">Password</label>
@@ -58,10 +68,11 @@ $.ajax({
           <input type="checkbox" value="remember-me"> Remember me
         </label>
       </div>
-      <button class="btn btn-lg btn-primary btn-block" onclick="writeUserData()" type="submit">Sign Up</button>
-      <button class="btn btn-lg btn-primary btn-block"> <a href='signup'>test</a></button>
+      <button class="btn btn-lg btn-primary btn-block" onclick="writeUserData()" type="submit">Sign In</button>
     </form>
+  
   </body>
+</body>
   </html>
 
 </html>

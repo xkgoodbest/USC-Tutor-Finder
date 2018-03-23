@@ -10,10 +10,10 @@ app = Flask(__name__)
 @app.route('/')
 def output():
 	# serve index template
-	return render_template('index.html', name='Joe!')
+	return render_template('index.html')
 
 @app.route('/receiver', methods = ['POST'])
-def worker():
+def signup():
 	permit='1'
 	data1 = request.json
 	if ("@" in data1['email']):
@@ -34,9 +34,35 @@ def worker():
 	else: permit='0'
 	return permit
 
+
+@app.route('/login', methods = ['POST'])
+def signin():
+	permit='0'
+	data1 = request.json
+	if ("@" in data1['email']):
+		user= data1['email'].split("@")[0]
+		postfix=data1['email'].split("@")[1]		
+		firebase1 = firebase.FirebaseApplication('https://inf551uscstudent.firebaseio.com', None)
+		result = firebase1.get(user, None)
+		print result['password'],data1['password']
+
+		if str(result['password'])==str(data1['password']):
+			print result['password'],data1['password']
+			permit=user
+			print permit
+		if postfix!='usc.edu':
+			permit='0'
+		if len(data1['email'].split("@"))!=2:
+			permit='0'
+	return permit
+
+
 @app.route('/signup')
-def red():
-	return render_template('signup.html',name='Joe!')
+def redToUp():
+	return render_template('signup.html')
+@app.route('/signin')
+def redToIn():
+	return render_template('signin.html')
 
 if __name__ == '__main__':
 	# run!

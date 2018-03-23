@@ -14,54 +14,20 @@
     <!-- Custom styles for this template -->
     <link href="{{url_for('static',filename='styles/signin.css')}}" rel="stylesheet">
   </head>
+    <body style="width:100%;background:url('static/homepage copy.jpg');background-size: cover;">
 
   <body class="text-center">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
 
-  <script>
-  // Initialize Firebase
-  var config = {
-    apiKey: "AIzaSyD_HuGwLAWRkG8hdgJ3ZZ1uP0PRtmp2mRI",
-    authDomain: "inf551uscstudent.firebaseapp.com",
-    databaseURL: "https://inf551uscstudent.firebaseio.com",
-    projectId: "inf551uscstudent",
-    storageBucket: "inf551uscstudent.appspot.com",
-    messagingSenderId: "72153677100"
-  };
-  firebase.initializeApp(config);
-  var database = firebase.database();
-  var ref = firebase.database().ref();
-
-  function writeUserData() {
-  	var email = document.getElementById('inputEmail').value;
-  	var password = document.getElementById('inputPassword').value;
-$.ajax({
-  type : 'POST',
-  url : "/signup",
-  contentType: 'application/json;charset=UTF-8',
-  data: JSON.stringify({"email":email,"password":password}),
-  
-});
-}
-</script>
 
     <form class="form-signin">
-      <img class="mb-4" src="/static/usc.png" alt="" width="72" height="72">
-      <h1 class="h3 mb-3 font-weight-normal">Please Sign Up!!!!!</h1>
-      <label for="inputEmail" class="sr-only">Email address</label>
-      <input type="email" name = "email" id="inputEmail" pattern=".+@uc.e" class="form-control" required title="123@usc.edu" placeholder="123@usc.edu" required autofocus>
-      <label for="inputPassword" class="sr-only">Password</label>
-      <input type="password" id="inputPassword" pattern=".{8,12}" required title="8 to 12 characters" class="form-control" placeholder="8 to 12 characters" required>
-      <div class="checkbox mb-3">
-        <label>
-          <input type="checkbox" value="remember-me"> Remember me
-        </label>
-      </div>
-      <button class="btn btn-lg btn-primary btn-block" onclick="writeUserData()" type="submit">Sign Up</button>
-      <button class="btn btn-lg btn-primary btn-block"> <a href='signup'>test</a></button>
+      <!--<img class="mb-4" src="/static/usc.png" alt="" width="72" height="72">-->
+      <a href='signup' class="btn btn-lg btn-primary btn-block btn-outline-secondary">Sign Up</a>
+      <a href='signin' class="btn btn-lg btn-primary btn-block btn-outline-secondary">Sign In</a>
     </form>
   </body>
+</body>
   </html>
 
 </html>

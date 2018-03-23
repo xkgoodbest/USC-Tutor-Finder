@@ -51,7 +51,6 @@ def signin():
 		if len(data1['email'].split("@"))!=2:
 			permit='0'
 	return permit
-	#return render_template("search.html", data=permit)
 
 
 @app.route('/signup')

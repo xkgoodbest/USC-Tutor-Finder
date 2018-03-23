@@ -8,9 +8,9 @@
     <meta name="author" content="">
     <link rel="icon" href="../../../../favicon.ico">
 
-    <link href="../bootstrap-4.0.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{url_for('static',filename='styles/bootstrap-4.0.0/dist/css/bootstrap.min.css')}}" rel="stylesheet">
+    <link href="{{url_for('static',filename='styles/navbar-top.css')}}" rel="stylesheet">
 
-    <link href="navbar-top.css" rel="stylesheet">
   </head>
 
   <body>
@@ -18,8 +18,10 @@
   <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
 
   <script>
-    
-
+    var user;
+    url = window.location.href;
+    user=(url.split("=")[1]);
+    alert(user)
 
 
   </script>

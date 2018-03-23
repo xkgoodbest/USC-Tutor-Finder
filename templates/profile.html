@@ -7,73 +7,65 @@
     <meta name="author" content="">
     <link rel="icon" href="usc.png">
 
-    <title>Checkout example for Bootstrap</title>
+    <title>Your Profile</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="../bootstrap-4.0.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{url_for('static',filename='styles/bootstrap-4.0.0/dist/css/bootstrap.min.css')}}" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="form-validation.css" rel="stylesheet">
+    <link href="{{url_for('static',filename='styles/profile.css')}}" rel="stylesheet">
   </head>
 
   <body class="bg-light">
 
     <div class="container">
       <div class="py-5 text-center">
-        <img class="d-block mx-auto mb-4" src="usc.png" alt="" width="72" height="72">
+        <img class="d-block mx-auto mb-4" src="/static/usc.png" alt="" width="72" height="72">
         <h2>Your Profile</h2>
         <p class="lead">You can easily edit your profile here!</p>
+ 
       </div>
 
         <div class="col-md-8 order-md-1">
+
           <h4 class="mb-3">Personal Information</h4> 
-          <form class="needs-validation" novalidate>
-            <div class="row">
-              <button name="edit" class="btn btn-default btn-lg"> edit </button>
-            </div>
-              <div class="mb-3">
-              <label for="email">Email <span class="text-muted">(USC email only)</span></label>
-              <input type="email" class="form-control" pattern=".+@usc.edu" id="email" placeholder="123@usc.edu">
-              <div class="invalid-feedback">
-                Please enter a valid email.
-              </div>
-            </div>
 
-            <div class="mb-3">
-              <label for="name">Full Name</label>
-              <input type="text" class="form-control" id="name" placeholder="Michael Jackson" required>
-              <div class="invalid-feedback">
-                Please enter your full name.
-              </div>
-            </div>
-          
-            <div class="mb-3">
-              <label for="password">Current Password</label>
-              <input type="password" class="form-control" pattern=".{8,12}" id="password"  required>
-            </div>
+              {% from "includes/_formhelpers.html" import render_field %}
 
-            <div class="mb-3">
-              <label for="password">New Password</label>
-              <input type="password" class="form-control" id="password" pattern=".{8,12}" required>
-            </div>
-            
-              <div class="mb-3">
-              <label for="name">Your Tutor Info</label>
-              <input type="text" class="form-control" id="name" placeholder="Michael Jackson" required>
-            </div>
+              <form method = "POST" action = "" class ="needs-validation">
+                  <div class = 'mb-3'>
+                    {{render_field(form.email,class_="form-control")}}
+                  </div>
 
-              <div class="mb-3">
-              <label for="name">Your Student Info</label>
-              <input type="text" class="form-control" id="name" placeholder="Michael Jackson" required>
-            </div>
-            
-            <hr class="mb-4">
-            <button class="btn btn-lg btn-primary btn-block" type="submit">Finish</button>
-          </form>
+                  <div class = 'mb-3'>
+                    {{render_field(form.name,class_="form-control")}}
+                  </div>
+
+                  <div class = 'mb-3'>
+                    {{render_field(form.Cur_Pwd ,class_="form-control")}}
+                  </div>
+
+                  <div class = 'mb-3'>
+                    {{render_field(form.New_pwd1 ,class_="form-control")}}
+                  </div>
+
+                  <div class = 'mb-3'>
+                    {{render_field(form.New_pwd2 ,class_="form-control")}}
+                  </div>
+
+                  <div class = 'mb-3'>
+                    {{render_field(form.Tut_info ,class_="form-control")}}
+                  </div>
+
+                  <div class = 'mb-3'>
+                    {{render_field(form.Stu_info ,class_="form-control")}}
+                  </div>
+
+                  <hr class="mb-4">
+                  <p><input class="btn btn-lg btn-primary btn-block" type="submit" value="Submit"></p>
+              </form>
         </div>
       </div>
-
-    </div>
 
     <!-- Bootstrap core JavaScript
     ================================================== -->

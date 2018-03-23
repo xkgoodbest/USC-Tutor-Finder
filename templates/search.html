@@ -1,12 +1,10 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="../../../../favicon.ico">
 
     <link href="{{url_for('static',filename='styles/bootstrap-4.0.0/dist/css/bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{url_for('static',filename='styles/navbar-top.css')}}" rel="stylesheet">
@@ -14,6 +12,7 @@
   </head>
 
   <body>
+    <p> hi: {{session.username}}</p>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
 
@@ -21,39 +20,49 @@
     var user;
     url = window.location.href;
     user=(url.split("=")[1]);
-    alert(user)
 
+    $(function () {
+      $("#search").keydown(function (e) {
+        if (e.keyCode == 13) {
+          a=writeUserData();
+          return false;
+        }
+      });
+    });
 
+function writeUserData() {
+  var query = document.getElementById('search').value;
+  alert(query);
+$.ajax({
+  type : 'POST',
+  url : "/searchItem",
+  contentType: 'application/json;charset=UTF-8',
+  data: JSON.stringify({"email":"pp","password":"b"}),
+  complete: function(r){
+       alert("ok");
+    }
+});
+}
   </script>
       <nav id = "grad" class="w-90 p-1 navbar navbar-expand-lg navbar-light bg-light border-bottom">
 
-      <a class="navbar-brand" href="/"><img class="d-block mx-auto mb-4" src="usc.png" width="40" height="40"></a>
+      <a class="navbar-brand" href="/">Tutor Finder</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="profile">Profile <span class="sr-only">(current)</span></a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">SignUp</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link disabled" href="#">SignIn</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link disabled" href="#">LogOut</a>
-          </li>
+
         </ul>
         <div class="col-md-4 col-md-offset-3">
-        <form action="" class="search-form">
-                <div class="form-group has-feedback">
-                <label for="search" class="sr-only">Search</label>
-                <input type="text" class="form-control" name="search" id="search" placeholder="search">
-                  <span class="glyphicon glyphicon-search form-control-feedback"></span>
-                </div>
-        </form>
+        <!--form class="search-form"-->
+              <div class="form-group has-feedback">
+              <input type="text" class="form-control" name="search" id="search" placeholder="Search">
+              </div>
+        <!--/form-->
       </div>
       </div>
     </nav>
@@ -62,7 +71,6 @@
       <div >
         <h2>Search Results</h2>
         <p class="lead">This example is a quick exercise to illustrate how the top-aligned navbar works. As you scroll, this navbar remains in its original position and moves with the rest of the page.</p>
-        <a class="btn btn-lg btn-primary" href="../../components/navbar/" role="button">View navbar docs &raquo;</a>
       </div>
     </main>
 
@@ -70,8 +78,7 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script>window.jQuery || document.write('<script src="../../../../assets/js/vendor/jquery-slim.min.js"><\/script>')
-    <script src="../../../../assets/js/vendor/popper.min.js"></script>
-    <script src="../../../../dist/js/bootstrap.min.js"></script>
+    <script>window.jQuery || document.write('<script src="../../../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+
   </body>
 </html>

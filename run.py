@@ -57,11 +57,9 @@ def signin():
 				permit='0'
 			if len(data1['email'].split("@"))!=2:
 				permit='0'
-	print permit
 	if permit !='0':
 		session['signin'] = True
 		session['username'] = user
-
 	return permit
 
 #sign out		

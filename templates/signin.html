@@ -37,22 +37,22 @@
   function writeUserData() {
   	var email = document.getElementById('inputEmail').value;
   	var password = document.getElementById('inputPassword').value;
-$.ajax({
-  type : 'POST',
-  url : "/login",
-  contentType: 'application/json;charset=UTF-8',
-  data: JSON.stringify({"email":email,"password":password}),
-  complete: function(r){
-       if (r.responseText!="0"){
-        var user = email.substr(0, email.indexOf('@'));
-        alert("You are signed in successfully as "+user);
-        location.href="/search";
-       }
-       else{
-        alert("Login failed!")
-       }
-    }
-});
+    $.ajax({
+      type : 'POST',
+      url : "/login",
+      contentType: 'application/json;charset=UTF-8',
+      data: JSON.stringify({"email":email,"password":password}),
+      complete: function(r){
+           if (r.responseText!="0"){
+            var user = email.substr(0, email.indexOf('@'));
+            alert("You are signed in successfully as "+user);
+            location.href="/search";
+           }
+           else{
+            alert("Login failed!")
+           }
+      }
+    });
 }
 </script>
 

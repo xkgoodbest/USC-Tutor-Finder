@@ -13,34 +13,21 @@
 
   <body>
     <p> hi: {{session.username}}</p>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
-  <!--<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
 
-  <script>
-    var user;
-    url = window.location.href;
-    user=(url.split("=")[1]);
-    $(function () {
-      $("#search").keydown(function (e) {
-        if (e.keyCode == 13) {
-          a=writeUserData();
+  <script >
 
-          return false;
-        }
-      });
-    });
+  //var query = document.getElementById('search').value;
+         $.ajax({
+            type: "GET",
+            url: "/searchItem/{\"query\":\"0 INF-551\"}",
+            contentType: "application/json; charset=utf-8",
+            success: function(data) {
+                courseData=$('#Result').text(data.value);
+            }
+        });
 
-function writeUserData(query) {
-  var query = document.getElementById('search').value;
-  //alert(query);
-  $.ajax({
-    type: "GET",
-    url: "/searchItem",
-    data:String(query)
-});
-
-}
   </script>
       <nav id = "grad" class="w-90 p-1 navbar navbar-expand-lg navbar-light bg-light border-bottom">
 
@@ -59,6 +46,7 @@ function writeUserData(query) {
         <!--form class="search-form"-->
               <div class="form-group has-feedback">
               <input type="text" class="form-control" name="search" id="search" placeholder="Search">
+              <button  onclick="getQuery()" type="submit">Searching</button>
               </div>
         <!--/form-->
       </div>

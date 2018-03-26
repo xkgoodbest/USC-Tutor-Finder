@@ -1,21 +1,44 @@
 #!flask/bin/python
 import json
 import sys
+import firebase_admin
+from firebase_admin import db
+from firebase_admin import credentials
+from collections import Counter
+
 from firebase import firebase
-from flask import Flask, render_template, request, redirect, Response,url_for, session
+from flask import Flask, render_template, request, redirect, Response,url_for, session,jsonify
 import random, json
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
-#decorator 
 from functools import wraps
 
 app = Flask(__name__)
 app.secret_key = "super secret key"
-# Config FIrebase
-con_firebase = firebase.FirebaseApplication('https://inf551uscstudent.firebaseio.com', None)
+'''
+def courseDB():
+	cred = credentials.Certificate('inf551usc-61ddc-firebase-adminsdk-q0b5n-d71e4905da.json')
+	courseAPP=firebase_admin.initialize_app(cred, {
+    	'databaseURL': 'https://inf551usc-61ddc.firebaseio.com/',
+    	'databaseAuthVariableOverride': None
+	})
+	ref = db.reference()
+	data=ref.get()
 
+	return data
+	
+def studentDB():
+	cred1 = credentials.Certificate('inf551uscstudent-firebase-adminsdk-dsdlg-5b915adbf0.json')
+	studentAPP=firebase_admin.initialize_app(cred1, {
+    	'databaseURL': 'https://inf551uscstudent.firebaseio.com/',
+    	'databaseAuthVariableOverride': None
+	})
+	ref = db.reference()
+	data=ref.get()
+	Firebase.goOffline();
+	return data
+	'''
 @app.route('/')
 def output():
-	# serve index template
 	return render_template('index.html')
 
 @app.route('/receiver', methods = ['POST'])
@@ -78,16 +101,45 @@ def redToIn():
 def redToSe():
 	user=request.values.get('user')
 	return render_template('search.html',user=user)
+@app.route('/searchItem/<jsdata>', methods = ['GET'])
+def searchItems(jsdata):
+	firebase1 = firebase.FirebaseApplication('https://inf551uscstudent.firebaseio.com/', None)
+	studentData = firebase1.get('', None)
+	firebase2 = firebase.FirebaseApplication('https://inf551usc-61ddc.firebaseio.com/', None)
+	courseData = firebase2.get('', None)
+	subQueries=json.loads(jsdata)['query'].split()[1:]
+	option=json.loads(jsdata)['query'].split()[0]
+	numbers=[]
+	if option=='0':
+		for subQuery in subQueries:
+			for number,oneCourse in enumerate(courseData):
+				if(subQuery.lower() in oneCourse['courseID'].lower()):
+					numbers.append(number)
+	elif option=='1':
+		for subQuery in subQueries:
+			for number,oneCourse in enumerate(courseData):
+				if(subQuery.lower() in oneCourse['courseInstructors'].lower()):
+					numbers.append(number)
+	else:
+		for subQuery in subQueries:
+			for number,oneCourse in enumerate(courseData):
+				if(subQuery.lower() in oneCourse['courseName'].lower()):
+					numbers.append(number)
+	time_counts = Counter(numbers)
+	numbers=list(set(numbers))
+	top= time_counts.most_common(len(numbers))
+	numbers=list(zip(*top)[0])
+	returnList=list(courseData[i] for i in numbers )
+	for oneCourse in returnList:
+		will=[]
 
-@app.route('/searchItem', methods = ['POST'])
-def searchItems():
-	query = request.data
-	print query
-	firebase1 = firebase.FirebaseApplication('https://inf551uscstudent.firebaseio.com', None)
-	result = firebase1.get(user, None)
-
-	return permit
-
+		for oneStudent in studentData.keys():
+			if studentData[oneStudent].has_key('will'):
+				for aCourse in studentData[oneStudent]['will']:
+					if aCourse['courseID']==oneCourse['courseID'] and aCourse['instructors']==oneCourse['courseInstructors']:
+						will.append(studentData[oneStudent]['email'])
+		oneCourse['willToTutor']=will
+	return jsonify(returnList)
 #profile.html
 class ProfileEdit(Form):
 	email = StringField("Email", [validators.Length(min = 1, max = 50)])

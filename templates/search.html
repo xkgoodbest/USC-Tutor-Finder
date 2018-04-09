@@ -17,16 +17,74 @@
 <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
 
   <script >
+    function getQuery(){
 
+    }
   //var query = document.getElementById('search').value;
-         $.ajax({
+        $.ajax({
             type: "GET",
-            url: "/searchItem/{\"query\":\"0 INF-551\"}",
+            url: "/searchItem/{\"query\":\"0 INF\"}",
             contentType: "application/json; charset=utf-8",
+            dataType: 'json',
             success: function(data) {
-                courseData=$('#Result').text(data.value);
+                disp(data);
             }
         });
+        function disp(jsons){
+            var i;
+            for (i = 0; i < jsons.length; i++) { 
+                var element=document.getElementById("disp");
+
+                var para=document.createElement("p");
+                var node=document.createTextNode("courseID: "+jsons[i].courseID);
+                para.appendChild(node);
+                element.appendChild(para);
+
+                var para=document.createElement("p");
+                var node=document.createTextNode("courseInstructors: "+jsons[i].courseInstructors);
+                para.appendChild(node);
+                element.appendChild(para);
+
+                var para=document.createElement("p");
+                var node=document.createTextNode("courseName: "+jsons[i].courseName);
+                para.appendChild(node);
+                element.appendChild(para); 
+                
+                var br=document.createElement("br");
+                var j;
+                var tutorDIV=document.createElement("div");
+                var p=document.createElement("p");
+                var node=document.createTextNode("Tutors available: ");
+                tutorDIV.appendChild(br);
+                p.appendChild(node);
+                tutorDIV.appendChild(p)
+                for(j=0;j<jsons[i].willToTutor.length;j++){
+                  var checkBox = document.createElement("input");
+                  var label = document.createElement("label");
+                  checkBox.type = "checkbox";
+                  checkBox.value = jsons[i].willToTutor[j];
+                  tutorDIV.appendChild(checkBox);
+                  tutorDIV.appendChild(label);
+                  label.appendChild(document.createTextNode(jsons[i].willToTutor[j]));
+                }
+                para.appendChild(tutorDIV);
+                element.appendChild(para);
+                element.appendChild(br);
+
+                var willing=document.createElement("div");
+                var p=document.createElement("p");                
+                var willCheck = document.createElement("input");
+                var label = document.createElement("label");
+                willCheck.type = "checkbox";
+                willing.appendChild(willCheck);
+                willing.appendChild(label);
+                label.appendChild(document.createTextNode("Willing to tutor this course?"));
+                willing.appendChild(br);  
+                para.appendChild(willing);
+                element.appendChild(para);
+                element.appendChild(br);
+            }
+        }
 
   </script>
       <nav id = "grad" class="w-90 p-1 navbar navbar-expand-lg navbar-light bg-light border-bottom">
@@ -54,12 +112,16 @@
     </nav>
 
     <main role="main" class="container-fluid">
-      <div >
+      <div>
         <h2>Search Results</h2>
         
       </div>
     </main>
-
+    <div class="container">
+      <div id="disp" class="jumbotron mt-3">        
+      </div>
+    </div>
+      
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->

@@ -14,29 +14,6 @@ from functools import wraps
 
 app = Flask(__name__)
 app.secret_key = "super secret key"
-'''
-def courseDB():
-	cred = credentials.Certificate('inf551usc-61ddc-firebase-adminsdk-q0b5n-d71e4905da.json')
-	courseAPP=firebase_admin.initialize_app(cred, {
-    	'databaseURL': 'https://inf551usc-61ddc.firebaseio.com/',
-    	'databaseAuthVariableOverride': None
-	})
-	ref = db.reference()
-	data=ref.get()
-
-	return data
-	
-def studentDB():
-	cred1 = credentials.Certificate('inf551uscstudent-firebase-adminsdk-dsdlg-5b915adbf0.json')
-	studentAPP=firebase_admin.initialize_app(cred1, {
-    	'databaseURL': 'https://inf551uscstudent.firebaseio.com/',
-    	'databaseAuthVariableOverride': None
-	})
-	ref = db.reference()
-	data=ref.get()
-	Firebase.goOffline();
-	return data
-	'''
 @app.route('/')
 def output():
 	return render_template('index.html')

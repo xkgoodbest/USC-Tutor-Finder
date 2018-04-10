@@ -61,6 +61,7 @@
                 for(j=0;j<jsons[i].willToTutor.length;j++){
                   var checkBox = document.createElement("input");
                   var label = document.createElement("label");
+                  checkBox.id="tutor0"+jsons[i].willToTutor+jsons[i].courseID+jsons[i].courseInstructors;
                   checkBox.type = "checkbox";
                   checkBox.value = jsons[i].willToTutor[j];
                   tutorDIV.appendChild(checkBox);
@@ -76,6 +77,10 @@
                 var willCheck = document.createElement("input");
                 var label = document.createElement("label");
                 willCheck.type = "checkbox";
+                willCheck.id="will0"+jsons[i].courseID+jsons[i].courseInstructors;
+                willCheck.onclick = function(){
+                    alert(willCheck.id);
+                };               
                 willing.appendChild(willCheck);
                 willing.appendChild(label);
                 label.appendChild(document.createTextNode("Willing to tutor this course?"));

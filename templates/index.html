@@ -8,28 +8,81 @@
     <link rel="icon" href="/static/usc.png">
     <!--<title>Signin Template for Bootstrap</title>-->
 
-    <!-- Bootstrap core CSS -->
-    <link href="{{url_for('static',filename='styles/bootstrap-4.0.0/dist/css/bootstrap.min.css')}}" rel="stylesheet">
+    <!-- Bootstrap core CSS 
+    <link href="{{url_for('static',filename='styles/bootstrap-4.0.0/dist/css/bootstrap.min.css')}}" rel="stylesheet">-->
+     <link href="{{url_for('static',filename='styles/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
+    
+     
+     <link href="{{url_for('static',filename='styles/css/styles.css')}}" rel="stylesheet">
 
-    <!-- Custom styles for this template -->
+    <!-- Custom styles for this template 
     <link href="{{url_for('static',filename='styles/signin.css')}}" rel="stylesheet">
+    <link href="{{url_for('static',filename='styles/index.css')}}" rel="stylesheet">
+  -->
+    <title>USC Tutor Finder</title>
   </head>
-    <body style="width:100%;background:url('static/homepage copy.jpg');background-size: cover;">
+<body style="width:100%;background:url('static/homepage.jpg');background-size: cover;">
 
-  <body class="text-center">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-<script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
+<body class="text-center">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
+<!--
+
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">
+        <img alt="Brand" src="/static/usc.png" width="30" height="30">
+      </a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <ul class="nav navbar-nav"><li class="active">USC Tutor Finder</li></ul>
+
+     <ul class="nav navbar-nav navbar-right">
+        <li><a href="signup">Sign Up</a></li>
+        <li><a href="signin">Sign In</a></li>
+    </ul>
+  </div>
+</div>
+</nav>
+-->
+
+<div style ="position:fixed; top: 20%; left: 10%; width: 950px; height: 100px; ">
+
+    <div class="row ">
+      
+      <div class="col-md-4 col-md-offset-4">
+        <div class="login-wrapper">
+          <div class="box">
+
+            <div class="content-wrap">
+              <img class="mb-4" src="/static/usc.png" alt="" width="72" height="72">
+              <form class="form-signin">
+                <br/>
+               <h6>USC Tutor Finder</h6>
+                 <a href='signin' class="btn btn-lg btn-primary btn-block btn-outline-secondary">Sign In</a>
+                <a href='signup' class="btn btn-lg btn-primary btn-block btn-outline-secondary">Sign Up</a>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 
-    <form class="form-signin">
-      <a href='signup' class="btn btn-lg btn-primary btn-block btn-outline-secondary">Sign Up</a>
-      <a href='signin' class="btn btn-lg btn-primary btn-block btn-outline-secondary">Sign In</a>
-      <!--a href='profile' class="btn btn-lg btn-primary btn-block btn-outline-secondary">profile</a>
-      <a href='signout' class="btn btn-lg btn-primary btn-block btn-outline-secondary">signout</a-->
-
-    </form>
-  </body>
+<footer style="position:fixed; bottom:0;height:40px;width: 100%;">
+            <div class="text-center">
+               Copyright 2018  
+               <a href='index.html'>USC Tutor Finder</a>
+            </div>
+</footer>
 </body>
+
+</body>
+
   </html>
 
 </html>

@@ -147,6 +147,10 @@ def redToProfile():
 		return render_template('profile.html')
 
 	return render_template('profile.html', form=form)
+	
+@app.route('/reset_pwd')
+def rest_pass():
+	return render_template('reset_pwd.html')
 
 
 if __name__ == '__main__':

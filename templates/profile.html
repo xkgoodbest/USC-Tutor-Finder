@@ -1,101 +1,213 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="usc.png">
+    <title>USC Tutor Finder</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
 
-    <title>Your Profile</title>
+    <link href="{{url_for('static',filename='styles/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
 
-    <!-- Bootstrap core CSS -->
-    <link href="{{url_for('static',filename='styles/bootstrap-4.0.0/dist/css/bootstrap.min.css')}}" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-    <link href="{{url_for('static',filename='styles/profile.css')}}" rel="stylesheet">
+    <link href="{{url_for('static',filename='styles/css/styles.css')}}" rel="stylesheet">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
   </head>
+  <body>
+  	<div class="header">
+	     <div class="container">
+	        <div class="row">
+	           <div class="col-md-5">
+	              <!-- Logo -->
+	              <div class="logo">
+	                 <h1><a href="index.html">USC Tutor Finder</a></h1>
+	              </div>
+	           </div>
+	           
+	           <div class="col-md-3" style="float: right;">
+	           	<div class="col-md-5">
+	           		<form action="/hms/accommodations" method="GET">
+	              <div class="row">
+	                <div class="col-sm-12">
+	                  <div class="input-group form" >
+	                       <input type="text" id ="search" class="form-control" placeholder="Search..." style="width: 220px;">
+	                       <span class="input-group-btn"  >
+	                         <button class="btn btn-primary" type="button">Search</button>
+	                       </span>
+	                  </div>
+	                </div>
+	              </div>
+	          </form>
+	           </div>
+	           </div>
 
-  <body class="bg-light">
-    <p>hi: {{session.username}}</p>
-    <div class="container">
-      <div class="py-5 text-center">
-        <img class="d-block mx-auto mb-4" src="/static/usc.png" alt="" width="72" height="72">
-        <h2>Your Profile</h2>
-        <p class="lead">You can easily edit your profile here!</p>
- 
-      </div>
+	        </div>
+	     </div>
+	</div>
 
-        <div class="col-md-8 order-md-1">
+    <div class="page-content">
+    	<div class="row">
+		  <div class="col-md-2">
+		  	<div class="sidebar content-box" style="display: block;">
+                <ul class="nav">
+                    <!-- Main menu -->
+                    <li class="current"><a href="profile"><i class="glyphicon glyphicon-home"></i> Dashboard</a></li>
+                    <li><a href="forms.html"><i class="glyphicon glyphicon-tasks"></i> search</a></li>
+                    <li><a href="reset_pwd"><i class="glyphicon glyphicon-tasks"></i> reset pwd</a></li>
+                    <li><a href="forms.html"><i class="glyphicon glyphicon-tasks"></i> SignOut</a></li>
+                    
+                </ul>
+             </div>
+		  </div>
 
-          <h4 class="mb-3">Personal Information</h4> 
 
-              {% from "includes/_formhelpers.html" import render_field %}
+<script type="text/javascript">
+		$.fn.textbox = function(){
+    		this.each(function(){
+          	if (!($(this).find('input').length)){
+              	var t = $(this).text();
+                $(this).text('').append($('<input />',	{'value' : t}).val(t));
+    		}
+    		});    
+		};
 
-              <form method = "POST" action = "" class ="needs-validation">
-                  <div class = 'mb-3'>
-                    {{render_field(form.email,class_="form-control")}}
-                  </div>
+		  	$(document).on('click','#edit',function() {
+				var r= $('<button type="button" class="btn btn-primary" id="btn">submit</button>');
+	
+  				if($("#first").find("#btn").length == 0) {
+   					$('#first').append(r);
+  				}
+   
+  				$("#first").find('p').textbox(); 
+  
+  				$(document).ready(function() {
+    				$('#btn').click(function() {
+        				$('input').each(function(){
+ 							var t = $("#first").find('input').val();
+          					$("#first").find('input').replaceWith('<p>'+ t + '</p>')
+          					if($("#first").find("#btn").length != 0){
+          	  					$('#btn').remove();
+          	  				}
+          
+						});
+    				});
+				});
+			});
+</script>
 
-                  <div class = 'mb-3'>
-                    {{render_field(form.name,class_="form-control")}}
-                  </div>
 
-                  <div class = 'mb-3'>
-                    {{render_field(form.Cur_Pwd ,class_="form-control")}}
-                  </div>
+		  <div class="col-md-10">
+		  	<div class="row">
 
-                  <div class = 'mb-3'>
-                    {{render_field(form.New_pwd1 ,class_="form-control")}}
-                  </div>
+		  		<div class="col-md-6">
+		  				<div class="content-box-large">
+			  				<div class="panel-heading">
+					            <div class="panel-title">Basic Information</div>
+					        
+					          
+					            <div class="panel-options">
+					            	<a href='#'><i id="edit" class="glyphicon glyphicon-cog"></i></a>
+					            </div>
+					        </div>
+					        <br/>
+					        
+					        <div class="panel-body">
+			  				<form id="first" class="form-horizontal" role="form">
+			  						<div class="form-group">
+								    <label for="inputEmail3" class="col-sm-2 control-label">User Name</label>   
+								    		<div class="col-sm-10" style= "margin-top: 14px;">
+								     			<p>First Element</p>
+								    		</div>
+								  </div>
+								  	
+								  	<div class="form-group">
+								    <label for="inputEmail3" class="col-sm-2 control-label">Contact Name</label>
+								    		<div class="col-sm-10" style= "margin-top: 14px;">
+								      			<p>second Element</p>
+								    		</div>
+								  	</div>
 
-                  <div class = 'mb-3'>
-                    {{render_field(form.New_pwd2 ,class_="form-control")}}
-                  </div>
+								  	<div class="form-group">
+								    <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
+								    	<div class="col-sm-10" style= "margin-top: 8px;">
+								      		<p>third Element</p>
+								    	</div>
+								  	</div>
 
-                  <div class = 'mb-3'>
-                    {{render_field(form.Tut_info ,class_="form-control")}}
-                  </div>
+								  <div class="form-group">
+								    <label for="inputEmail3" class="col-sm-2 control-label">Phone</label>
+								    	<div class="col-sm-10" style= "margin-top: 6px;">
+								      		<p id="forthElement" onclick="turnTextIntoInputField('forthElement');">forth Element</p>
+								    	</div>
+								  </div>
 
-                  <div class = 'mb-3'>
-                    {{render_field(form.Stu_info ,class_="form-control")}}
-                  </div>
+								  <!--<div class="form-group">
+								    <div class="col-sm-offset-2 col-sm-10">
+								      <button type="submit" class="btn btn-primary" id="bas-info-sub">submit</button>
+								    </div>
+								  </div>-->
+								
+								</form>
+			  			</div>
+		  		</div>
+		  	</div>
 
-                  <hr class="mb-4">
-                  <p><input class="btn btn-lg btn-primary btn-block" type="submit" value="Submit"></p>
-              </form>
-        </div>
-      </div>
+		  		<div class="col-md-6">
+		  			<div class="row">
+		  				<div class="col-md-12">
+		  					<div class="content-box-header">
+			  					<div class="panel-title">Your Tutor</div>
+								
+								<div class="panel-options">
+									<a href="#" data-rel="collapse"><i class="glyphicon glyphicon-refresh"></i></a>
+									<a href="#" data-rel="reload"><i class="glyphicon glyphicon-cog"></i></a>
+								</div>
+				  			</div>
+				  			<div class="content-box-large box-with-header">
+					  			1
+								<br /><br />
+							</div>
+		  				</div>
+		  			</div>
+		  			<div class="row">
+		  				<div class="col-md-12">
+		  					<div class="content-box-header">
+			  					<div class="panel-title">Your Student</div>
+								
+								<div class="panel-options">
+									<a href="#" data-rel="collapse"><i class="glyphicon glyphicon-refresh"></i></a>
+									<a href="#" data-rel="reload"><i class="glyphicon glyphicon-cog"></i></a>
+								</div>
+				  			</div>
+				  			<div class="content-box-large box-with-header">
+				  				1
+								<br /><br />
+							</div>
+		  				</div>
+		  			</div>
+		  		</div>
+		  	</div>
+		  </div>
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script>window.jQuery || document.write('<script src="../bootstrap-4.0.0/assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
-    <script src="../bootstrap-4.0.0/assets/js/vendor/popper.min.js"></script>
-    <script src="../bootstrap-4.0.0./dist/js/bootstrap.min.js"></script>
-    <script src="../bootstrap-4.0.0/assets/js/vendor/holder.min.js"></script>
-    <script>
-      // Example starter JavaScript for disabling form submissions if there are invalid fields
-      (function() {
-        'use strict';
+	<!-- row-->
+	</div>
+	<!-- page conten-->
+  </div>
 
-        window.addEventListener('load', function() {
-          // Fetch all the forms we want to apply custom Bootstrap validation styles to
-          var forms = document.getElementsByClassName('needs-validation');
 
-          // Loop over them and prevent submission
-          var validation = Array.prototype.filter.call(forms, function(form) {
-            form.addEventListener('submit', function(event) {
-              if (form.checkValidity() === false) {
-                event.preventDefault();
-                event.stopPropagation();
-              }
-              form.classList.add('was-validated');
-            }, false);
-          });
-        }, false);
-      })();
-    </script>
+
+
+
+    <footer style="position:fixed; bottom:0;height:40px;width: 100%;">
+            <div class="text-center">
+               Copyright 2018 <a href=#>USC Tutor Finder</a>
+            </div>
+      </footer>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) 
+     <script src="https://code.jquery.com/jquery.js"></script>-->
+   
+    <!-- Include all compiled plugins (below), or include individual files as needed 
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="js/custom.js"></script>-->
+    
   </body>
 </html>

@@ -1,27 +1,23 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <link href="{{url_for('static',filename='styles/bootstrap-4.0.0/dist/css/bootstrap.min.css')}}" rel="stylesheet">
-    <link href="{{url_for('static',filename='styles/navbar-top.css')}}" rel="stylesheet">
-
+<!DOCTYPE html>
+<html>
+ <head>
+    <title>USC Tutor Finder</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap 
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>-->
+    
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+     <link href="{{url_for('static',filename='styles/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
+    <link href="{{url_for('static',filename='styles/css/styles.css')}}" rel="stylesheet">
+  <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   </head>
 
   <body>
-    <p> hi: {{session.username}}</p>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-<script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
-
-  <script>
+    <script>
+      /*
     function getQuery(){
-
-    }
-  //var query = document.getElementById('search').value;
-        $.ajax({
+              $.ajax({
             type: "GET",
             url: "/searchItem/{\"query\":\"0 INF\"}",
             contentType: "application/json; charset=utf-8",
@@ -30,6 +26,13 @@
                 disp(data);
             }
         });
+
+    }
+    */
+
+
+  //var query = document.getElementById('search').value;
+
         function disp(jsons){
             var i;
             for (i = 0; i < jsons.length; i++) { 
@@ -91,47 +94,126 @@
             }
         }
 
+          $(document).ready(function(){
+                  $("button").click(function(){
+                     alert("here");
+                        $.ajax({
+            type: "GET",
+            url: "/searchItem/{\"query\":\"0 INF\"}",
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json',
+            success: function(data) {
+                disp(data);
+            }
+        });
+    });
+});
+/*
+                   $.ajax({
+            type: "GET",
+            url: "/searchItem/{\"query\":\"0 INF\"}",
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json',
+            success: function(data) {
+                disp(data);
+            }
+        });
+*/
   </script>
-      <nav id = "grad" class="w-90 p-1 navbar navbar-expand-lg navbar-light bg-light border-bottom">
 
-      <a class="navbar-brand" href="/">Tutor Finder</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarCollapse">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="profile">Profile <span class="sr-only">(current)</span></a>
-          </li>
 
-        </ul>
-        <div class="col-md-4 col-md-offset-3">
-        <!--form class="search-form"-->
-              <div class="form-group has-feedback">
-              <input type="text" class="form-control" name="search" id="search" placeholder="Search">
-              <button  onclick="getQuery()" type="submit">Searching</button>
+    <div class="header">
+       <div class="container">
+          <div class="row">
+             <div class="col-md-4">
+                <!-- Logo -->
+                <div class="logo">
+                   <h1><a href="/">USC Tutor Finder</a></h1>
+                </div>
               </div>
-        <!--/form-->
-      </div>
-      </div>
-    </nav>
 
-    <main role="main" class="container-fluid">
+             <div class="col-md-3" >
+              <div class="col-md-7">
+                <form action="/hms/accommodations" method="GET">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="input-group form" >
+                         <input type="text" id ="search" class="form-control" placeholder="Search..." style="width: 200px;">
+                         <span class="input-group-btn"  >
+                           <!--<button class="btn btn-primary" onclick="getQuery()" type="button">Search</button>-->
+                           <button class="btn btn-primary" type="button">Search</button>
+                         </span>
+                    </div>
+
+                  </div>
+                </div>
+            </form>
+             </div>
+             </div>
+            
+             <div class="col-md-3">
+              <ul class="nav navbar-nav">
+                <li><a href="#" id="instructor">instructor</a></li>
+                <li><a href="#" id="course_id">course id</a></li>
+                <li><a href="#" id="course_name">course name</a></li>
+              </ul>
+            </div>
+
+             <div class="col-md-2" style="float: right;">
+                <div class="navbar navbar-inverse" role="banner">
+                    <nav class="collapse navbar-collapse bs-navbar-collapse navbar-right" role="navigation">
+                      <ul class="nav navbar-nav">
+                        <li class="dropdown">
+                          <a href="#" class="dropdown-toggle" data-toggle="dropdown">My Account <b class="caret"></b></a>
+                          <ul class="dropdown-menu animated fadeInUp">
+                            <li><a href="profile">Profile</a></li>
+                            <li><a href="#">Signout</a></li>
+                          </ul>
+                        </li>
+                      </ul>
+                    </nav>
+                </div>
+             </div>
+
+
+          </div>
+       </div>
+  </div>
+
+ <div role="main" class="page-content container-fluid">
+  <div class="row">
+        
+
+
+
       <div>
         <h2>Search Results</h2>
-        
-      </div>
-    </main>
+        <p> hi: {{session.username}}</p>
+
+
     <div class="container">
       <div id="disp" class="jumbotron mt-3">        
       </div>
     </div>
+    </div>
+    </div>
+  </div>
+
+
+     <footer style="position:fixed; bottom:0;height:40px;width: 100%;">
+            <div class="text-center">
+               Copyright 2018 <a href=#>USC Tutor Finder</a>
+            </div>
+      </footer>
+
       
     <!-- Bootstrap core JavaScript
     ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
+    <!-- Placed at the end of the document so the pages load faster 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script>window.jQuery || document.write('<script src="../../../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script>window.jQuery || document.write('<script src="../../../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>-->
+    
 
   </body>
+</html>
 </html>

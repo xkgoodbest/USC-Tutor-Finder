@@ -62,6 +62,7 @@ def signin():
 		session['username'] = user
 	return permit
 
+
 #sign out		
 @app.route('/signout')
 def signout():
@@ -85,31 +86,10 @@ def searchItems(jsdata):
 	firebase2 = firebase.FirebaseApplication('https://inf551usc-61ddc.firebaseio.com/', None)
 	courseData = firebase2.get('', None)
 	subQueries=json.loads(jsdata)['query'].split()[1:]
-	option=json.loads(jsdata)['query'].split()[0]
-	numbers=[]
-	if option=='0':
-		for subQuery in subQueries:
-			for number,oneCourse in enumerate(courseData):
-				if(subQuery.lower() in oneCourse['courseID'].lower()):
-					numbers.append(number)
-	elif option=='1':
-		for subQuery in subQueries:
-			for number,oneCourse in enumerate(courseData):
-				if(subQuery.lower() in oneCourse['courseInstructors'].lower()):
-					numbers.append(number)
-	else:
-		for subQuery in subQueries:
-			for number,oneCourse in enumerate(courseData):
-				if(subQuery.lower() in oneCourse['courseName'].lower()):
-					numbers.append(number)
-	time_counts = Counter(numbers)
-	numbers=list(set(numbers))
-	top= time_counts.most_common(len(numbers))
-	numbers=list(zip(*top)[0])
-	returnList=list(courseData[i] for i in numbers )
+
+	returnList=courseData
 	for oneCourse in returnList:
 		will=[]
-
 		for oneStudent in studentData.keys():
 			if studentData[oneStudent].has_key('will'):
 				for aCourse in studentData[oneStudent]['will']:
@@ -117,7 +97,15 @@ def searchItems(jsdata):
 						will.append(studentData[oneStudent]['email'])
 		oneCourse['willToTutor']=will
 	return jsonify(returnList)
-#profile.html
+
+@app.route('/upHist', methods = ['POST'])
+def upHist():
+	print request.form['upHist']
+	print request.form['user']
+	firebase1 = firebase.FirebaseApplication('https://inf551uscstudent.firebaseio.com/', None)
+	firebase1.post(request.form['user']+'/History', request.form['upHist'])
+	return "received"
+
 class ProfileEdit(Form):
 	email = StringField("Email", [validators.Length(min = 1, max = 50)])
 	name  = StringField("Full Name", [validators.Length(min = 1, max = 30)])

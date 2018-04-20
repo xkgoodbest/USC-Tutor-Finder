@@ -28,9 +28,9 @@
 	              <div class="row">
 	                <div class="col-sm-12">
 	                  <div class="input-group form" >
-	                       <input type="text" id ="search" class="form-control" placeholder="Search..." style="width: 220px;">
+	                       <!--input type="text" id ="search" class="form-control" placeholder="Search..." style="width: 220px;"-->
 	                       <span class="input-group-btn"  >
-	                         <button class="btn btn-primary" type="button">Search</button>
+	                         <!--button class="btn btn-primary" type="button">Search</button-->
 	                       </span>
 	                  </div>
 	                </div>
@@ -58,36 +58,177 @@
 
 
 <script type="text/javascript">
-		$.fn.textbox = function(){
+
+	var u;
+	var c;
+	var e;
+	var p;
+
+		 $.fn.inputbox = function(){
     		this.each(function(){
           	if (!($(this).find('input').length)){
+            	//if input not exist
+                var i  = $(this)[0].id
               	var t = $(this).text();
-                $(this).text('').append($('<input />',	{'value' : t}).val(t));
+              	//change to inputbox
+                //$(this).html("<input type=text"+" id="+i+" value=\""+t+"\">");
+                if((this.id)=='user_name'){
+  					$(this).html("<input type=text"+" id="+i+" value=\""+t+"\" placeholder=\"username\">");
+  				}
+  				if((this.id)=='contact_name'){
+  					$(this).html("<input type=text"+" id="+i+" value=\""+t+"\" placeholder=\"contact name\">");
+  				}
+  				if((this.id)=='email'){
+  					$(this).html("<input type=text"+" id="+i+" value=\""+t+"\" pattern=\".+@usc.edu\" required title=\"123@usc.edu\" placeholder=\"123@usc.edu\">");
+  				}
+  				if((this.id)=='phone'){
+  					$(this).html("<input type=tel"+" id="+i+" value=\""+t+"\" placeholder=\"(555)555-5555\">");
+  				}
+                
     		}
     		});    
 		};
 
 		  	$(document).on('click','#edit',function() {
-				var r= $('<button type="button" class="btn btn-primary" id="btn">submit</button>');
-	
+				var sub= $('<button type="button" class="btn btn-primary" id="btn">submit</button>');
+				var cancel=$('<button type="button" class="btn btn-primary" id="cancel" style="margin-left:10px;">cancel</button>');
+				
+				//append button
   				if($("#first").find("#btn").length == 0) {
-   					$('#first').append(r);
-  				}
-   
-  				$("#first").find('p').textbox(); 
-  
-  				$(document).ready(function() {
-    				$('#btn').click(function() {
-        				$('input').each(function(){
- 							var t = $("#first").find('input').val();
-          					$("#first").find('input').replaceWith('<p>'+ t + '</p>')
-          					if($("#first").find("#btn").length != 0){
-          	  					$('#btn').remove();
-          	  				}
+
+   					$('#add_button').append(sub);
+   					$('#add_button').append(cancel);
+  				
+   				//change to inputbox
+  				$("#first").find('p').inputbox(); 
+  				$("#first").find('input').each(function(){
+  		
+  					if((this.id)=='user_name'){
+  						u=$(this).val();
+  					}
+  					if((this.id)=='contact_name'){
+  						c=$(this).val();
+  					}
+  					if((this.id)=='email'){
+  						e=$(this).val();
+  					}
+  					if((this.id)=='phone'){
+  						p=$(this).val();
+  					}
+              	});
+              	}else {
+              		//if button existed
+              		alert("please click on either submit or cancel")
+              	}
+  				
+			});
+		  	//submit button
+			$(document).on('click','#btn',function(){
+        		$("#first").find('input').each(function(){
+        			var i  = $(this)[0].id
+              		var t = $(this).val();
+
+              		var isMatch;
+            		var check =0;
+  					if($(this)[0].id=="email"){
+  							//check email
+                			isMatch = /^[a-zA-Z0-9._-]+@usc.edu$/.test(t);
+  						 	if (isMatch){
+  						 		$('#'+i).html("<p id="+i+">"+e+"</p>");
+  						 	}else{
+  						 		//wrong append
+                  				check = 1;
+                  				var sub= $('<strong>Wrong Email Format</strong>');
+  						 		$('#danger1').addClass("alert alert-danger");
+  						 		$('#danger1').append(sub);
+  						 	}
+  					}
+  						
+              		if($(this)[0].id=="phone"){
+              				//check phone
+  							isMatch = /^[0-9]{10}$/.test(t);
+  							$('#'+i).html("<p id="+i+">"+p+"</p>");
+  					}else{
+              				check = 1;
+              				//wrong append
+                  			var sub= $('<strong>Wrong Email Format</strong>');
+  						 		$('#danger2').addClass("alert alert-danger");
+  						 		$('#danger2').append(sub);
+              		}
+
+              		alert(check);
+					if(check==0){
+						alert("inside"+check);
+          				if($("#first").find("#btn").length != 0){
+          	  				$('#btn').remove();
+          	  				$('#cancel').remove();
+  						}
+            		}
+
+  					/*
+  					if($(this)[0].id=="email"){
+  						var isMatch = /^[a-zA-Z0-9._-]+@usc.edu$/.test(t);
+  						 if (isMatch){
+  						 	$('#'+i).html("<p id="+i+">"+e+"</p>");
+  						 }else{
+  						 	var sub= $('<strong>Wrong Input Format</strong>');
+  						 	$('#danger').addClass("alert alert-danger");
+  						 	$('#danger').append(sub);
+  						 }
+  						
+  						if($(this)[0].id=="phone"){
+  						
+  							$('#'+i).html("<p id="+i+">"+p+"</p>");
+  						}
+
+
+          				$('#'+i).html("<p id="+i+">"+t+"</p>");
+          				if($("#first").find("#btn").length != 0){
+          	  				$('#btn').remove();
+          	  				$('#cancel').remove();
+  					}
+  						if($(this)[0].id=="phone"){
+  						
+  						$('#'+i).html("<p id="+i+">"+p+"</p>");
+  					}
+          	  	}
+          	  	*/
           
-						});
-    				});
 				});
+    				
+			});
+			//cancel button 
+
+			$(document).on('click','#cancel',function(){
+        		$("#first").find('input').each(function(){
+        			var i  = $(this)[0].id
+              		//var t = $(this).val();
+              		//$('#'+i).html("<p id="+i+">"+t+"</p>");
+          			
+              		if($(this)[0].id=="user_name"){
+  						
+  						$('#'+i).html("<p id="+i+">"+u+"</p>");
+  					}
+  					if($(this)[0].id=="contact_name"){
+  						
+  						$('#'+i).html("<p id="+i+">"+c+"</p>");
+  					}
+  					if($(this)[0].id=="email"){
+  						
+  						$('#'+i).html("<p id="+i+">"+e+"</p>");
+  					}
+  					if($(this)[0].id=="phone"){
+  						
+  						$('#'+i).html("<p id="+i+">"+p+"</p>");
+  					}
+
+          			if($("#first").find("#btn").length != 0){
+          	  			$('#btn').remove();
+          	  			$('#cancel').remove();
+          	  		}
+          
+				});
+    				
 			});
 </script>
 
@@ -99,44 +240,49 @@
 		  				<div class="content-box-large">
 			  				<div class="panel-heading">
 					            <div class="panel-title">Basic Information</div>
-					        
-					          
+					        				          
 					            <div class="panel-options">
 					            	<a href='#'><i id="edit" class="glyphicon glyphicon-cog"></i></a>
 					            </div>
+
 					        </div>
 					        <br/>
+					        <div id="danger1"></div>
+  							<div id="danger2"></div>
 					        
 					        <div class="panel-body">
 			  				<form id="first" class="form-horizontal" role="form">
 			  						<div class="form-group">
 								    <label for="inputEmail3" class="col-sm-2 control-label">User Name</label>   
 								    		<div class="col-sm-10" style= "margin-top: 14px;">
-								     			<p>First Element</p>
+								     			<p id="user_name">First Element</p>
 								    		</div>
 								  </div>
 								  	
 								  	<div class="form-group">
 								    <label for="inputEmail3" class="col-sm-2 control-label">Contact Name</label>
 								    		<div class="col-sm-10" style= "margin-top: 14px;">
-								      			<p>second Element</p>
+								      			<p id="contact_name">second Element</p>
 								    		</div>
 								  	</div>
 
 								  	<div class="form-group">
 								    <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
 								    	<div class="col-sm-10" style= "margin-top: 8px;">
-								      		<p>third Element</p>
+								      		<p id="email">third Element</p>
 								    	</div>
 								  	</div>
 
 								  <div class="form-group">
 								    <label for="inputEmail3" class="col-sm-2 control-label">Phone</label>
 								    	<div class="col-sm-10" style= "margin-top: 6px;">
-								      		<p id="forthElement" onclick="turnTextIntoInputField('forthElement');">forth Element</p>
+								      		<p id="phone">forth Element</p>
 								    	</div>
 								  </div>
+								   <div style="float: left;" id="add_button">
 
+      							   </div>
+      
 								  <!--<div class="form-group">
 								    <div class="col-sm-offset-2 col-sm-10">
 								      <button type="submit" class="btn btn-primary" id="bas-info-sub">submit</button>
@@ -196,7 +342,7 @@
 
     <footer style="position:fixed; bottom:0;height:40px;width: 100%;">
             <div class="text-center">
-               Copyright 2018 <a href=#>USC Tutor Finder</a>
+               Copyright 2018 <a href="/">USC Tutor Finder</a>
             </div>
       </footer>
 

@@ -1,220 +1,257 @@
 <!DOCTYPE html>
 <html>
- <head>
-    <title>USC Tutor Finder</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Bootstrap 
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>-->
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-     <link href="{{url_for('static',filename='styles/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
-    <link href="{{url_for('static',filename='styles/css/styles.css')}}" rel="stylesheet">
-  <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
+ <head> 
+  <title>USC Tutor Finder</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> 
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script> 
+  <link href="{{url_for('static',filename='styles/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet" /> 
+  <link href="{{url_for('static',filename='styles/jquery.dataTables.min.css')}}" rel="stylesheet" /> 
+  <link href="{{url_for('static',filename='styles/css/styles.css')}}" rel="stylesheet" /> 
+  <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script> 
+  <script type="text/javascript" src="{{ url_for('static', filename='styles/bootstrap/js/jquery-1.12.4.js') }}"></script> 
+  <script type="text/javascript" src="{{ url_for('static', filename='styles/bootstrap/js/jquery.dataTables.min.js') }}"></script> 
+  <style type="text/css">
+    tfoot input {
+        width: 100%;
+        padding: 3px;
+        box-sizing: border-box;
+    }
+    tfoot {
+    display: table-header-group;
+}
+    </style> 
+ </head> 
+ <body> 
+  <script>
+$(document).ready(function() {
 
-  
-  </head>
+    // Setup - add a text input to each footer cell
+    $('#example tfoot th').each(function() {
+        var title = $(this).text();
+        $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+    });
 
-  <body>
-    <script>
-      /*
-    function getQuery(){
-              $.ajax({
-            type: "GET",
-            url: "/searchItem/{\"query\":\"0 INF\"}",
-            contentType: "application/json; charset=utf-8",
-            dataType: 'json',
-            success: function(data) {
-                disp(data);
+    // DataTable
+    var table = $('#example').DataTable();
+
+    // Apply the search
+    table.columns().every(function() {
+        var that = this;
+
+        $('input', this.footer()).on('keyup change',
+        function() {
+            if (that.search() !== this.value) {
+                that.search(this.value).draw();
             }
         });
+    });
+});
 
-    }
-    */
+function logValue() {
 
+    console.log(this.value);
+    console.log(this);
+    $.ajax({
+        type: 'POST',
+        url: "/saveTutor",
+        url: "/searchItem/{\"query\":\"0 INF\"}",
+        contentType: "application/json; charset=utf-8",
+        dataType: 'json',
 
-  //var query = document.getElementById('search').value;
+    });
+}
+function disp1(jsons) {
+    var father = document.getElementById("disp");
 
-        function disp(jsons){
-            var i;
-            for (i = 0; i < jsons.length; i++) { 
-                var element=document.getElementById("disp");
+    var thead = document.createElement("thead");
 
-                var para=document.createElement("p");
-                var node=document.createTextNode("courseID: "+jsons[i].courseID);
-                para.appendChild(node);
-                element.appendChild(para);
+    var trhead = document.createElement("tr");
 
-                var para=document.createElement("p");
-                var node=document.createTextNode("courseInstructors: "+jsons[i].courseInstructors);
-                para.appendChild(node);
-                element.appendChild(para);
+    var thhead1 = document.createElement("th");
+    var node1 = document.createTextNode("Course ID");
+    thhead1.appendChild(node1);
+    var thhead2 = document.createElement("th");
+    var node2 = document.createTextNode("Instructor(s)");
+    thhead2.appendChild(node2);
+    var thhead3 = document.createElement("th");
+    var node3 = document.createTextNode("Course Name");
+    thhead3.appendChild(node3);
+    trhead.appendChild(thhead1);
+    trhead.appendChild(thhead2);
+    trhead.appendChild(thhead3);
+    thead.appendChild(trhead);
 
-                var para=document.createElement("p");
-                var node=document.createTextNode("courseName: "+jsons[i].courseName);
-                para.appendChild(node);
-                element.appendChild(para); 
-                
-                var br=document.createElement("br");
-                var j;
-                var tutorDIV=document.createElement("div");
-                var p=document.createElement("p");
-                var node=document.createTextNode("Tutors available: ");
-                tutorDIV.appendChild(br);
-                p.appendChild(node);
-                tutorDIV.appendChild(p)
+    var element = document.createElement("tbody");
+    element.id = "courseData";
+    var i;
+    for (i = 0; i < jsons.length; i++) {
+        var eachDIV = document.createElement("tr");
+        eachDIV.id = jsons[i].courseID + "_" + jsons[i].courseInstructors
+        var para = document.createElement("td");
+        var node = document.createTextNode(jsons[i].courseID);
+        para.appendChild(node);
+        eachDIV.appendChild(para);
+
+        var para = document.createElement("td");
+        if (jsons[i].courseInstructors == "") {
+            var node = document.createTextNode("TBA");
+        } else {
+            var node = document.createTextNode(jsons[i].courseInstructors.substring(0, 30));
+        }
+        para.appendChild(node);
+        eachDIV.appendChild(para);
+
+        var para = document.createElement("td");
+        if (jsons[i].courseName == "") {
+            var node = document.createTextNode("TBA");
+        } else {
+            var node = document.createTextNode(jsons[i].courseName.substring(0, 35));
+        }
+        para.appendChild(node);
+        eachDIV.appendChild(para);
+
+        /*var j;
+                var para=document.createElement("td");
+                var x = document.createElement("SELECT");
+                x.setAttribute("id", jsons[i].courseID+"_"+jsons[i].courseInstructors);
+                document.body.appendChild(x);
+                var z = document.createElement("option");
+                var t = document.createTextNode("Not selected");
+                z.appendChild(t);
+                document.getElementById(jsons[i].courseID+"_"+jsons[i].courseInstructors).appendChild(z);
                 for(j=0;j<jsons[i].willToTutor.length;j++){
-                  var checkBox = document.createElement("input");
-                  var label = document.createElement("label");
-                  checkBox.id="tutor0"+jsons[i].willToTutor+jsons[i].courseID+jsons[i].courseInstructors;
-                  checkBox.type = "checkbox";
-                  checkBox.value = jsons[i].willToTutor[j];
-                  tutorDIV.appendChild(checkBox);
-                  tutorDIV.appendChild(label);
-                  label.appendChild(document.createTextNode(jsons[i].willToTutor[j]));
+                    var z = document.createElement("option");
+                    var t = document.createTextNode(jsons[i].willToTutor[j]);
+                    z.setAttribute("id", jsons[i].willToTutor[j]+"_"+jsons[i].courseID+"_"+jsons[i].courseInstructors);
+                    z.appendChild(t);
+                    document.getElementById(jsons[i].courseID+"_"+jsons[i].courseInstructors).appendChild(z);
                 }
-                para.appendChild(tutorDIV);
-                element.appendChild(para);
-                element.appendChild(br);
+                x.addEventListener('click', logValue, false);
+                para.appendChild(x);
+                eachDIV.appendChild(para);
 
-                var willing=document.createElement("div");
+                /*var willing=document.createElement("div");
                 var p=document.createElement("p");                
                 var willCheck = document.createElement("input");
                 var label = document.createElement("label");
                 willCheck.type = "checkbox";
-                willCheck.id="will0"+jsons[i].courseID+jsons[i].courseInstructors;
+                willCheck.id="will"+"_"+jsons[i].courseID+"_"+jsons[i].courseInstructors;
                 willCheck.onclick = function(){
                     alert(willCheck.id);
                 };               
                 willing.appendChild(willCheck);
                 willing.appendChild(label);
                 label.appendChild(document.createTextNode("Willing to tutor this course?"));
-                willing.appendChild(br);  
                 para.appendChild(willing);
-                element.appendChild(para);
-                element.appendChild(br);
-            }
-        }
+                eachDIV.appendChild(para);*/
+        element.appendChild(eachDIV);
+    }
 
-          $(document).ready(function(){
-                  $("button").click(function(){
-                     alert("here");
-                        $.ajax({
-            type: "GET",
-            url: "/searchItem/{\"query\":\"0 INF\"}",
-            contentType: "application/json; charset=utf-8",
-            dataType: 'json',
-            success: function(data) {
-                disp(data);
-            }
+    var tfoot = document.createElement("tfoot");
+    var trhead = document.createElement("tr");
+    var thhead1 = document.createElement("th");
+    var node1 = document.createTextNode("Course ID");
+    thhead1.appendChild(node1);
+    var thhead2 = document.createElement("th");
+    var node2 = document.createTextNode("Instructor(s)");
+    thhead2.appendChild(node2);
+    var thhead3 = document.createElement("th");
+    var node3 = document.createTextNode("Course Name");
+    thhead3.appendChild(node3);
+
+    trhead.appendChild(thhead1);
+    trhead.appendChild(thhead2);
+    trhead.appendChild(thhead3);
+    tfoot.appendChild(trhead);
+
+    var table = document.createElement("table");
+    table.id = "example";
+    table.className = "table table-striped table-bordered dt-responsive nowrap";
+    table.style = "width:100%";
+    table.appendChild(thead);
+    table.appendChild(tfoot);
+    table.appendChild(element);
+
+    father.appendChild(table);
+    $(document).ready(function() {
+        $('#example tfoot th').each(function() {
+            var title = $(this).text();
+            $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+        });
+        var table = $('#example').DataTable();
+        table.columns().every(function() {
+            var that = this;
+
+            $('input', this.footer()).on('keydown',
+            function(ev) {
+                if (ev.keyCode == 13) {
+                    that.search(this.value).draw();
+                    upHist(this.value);
+                }
+            });
         });
     });
+    var hid = document.getElementById("example_filter");
+    hid.style.visibility = "hidden";
+}
+
+$.ajax({
+    type: "GET",
+    url: "/searchItem/{\"query\":\"0 INF\"}",
+    contentType: "application/json; charset=utf-8",
+    dataType: 'json',
+    success: function(data) {
+        disp1(data);
+    }
 });
-/*
-                   $.ajax({
-            type: "GET",
-            url: "/searchItem/{\"query\":\"0 INF\"}",
-            contentType: "application/json; charset=utf-8",
-            dataType: 'json',
-            success: function(data) {
-                disp(data);
-            }
-        });
-*/
-  </script>
-
-
-    <div class="header">
-       <div class="container">
-          <div class="row">
-             <div class="col-md-4">
-                <!-- Logo -->
-                <div class="logo">
-                   <h1><a href="/">USC Tutor Finder</a></h1>
-                </div>
-              </div>
-
-             <div class="col-md-3" >
-              <div class="col-md-7">
-                <form action="/hms/accommodations" method="GET">
-                <div class="row">
-                  <div class="col-sm-12">
-                    <div class="input-group form" >
-                         <input type="text" id ="search" class="form-control" placeholder="Search..." style="width: 200px;">
-                         <span class="input-group-btn"  >
-                           <!--<button class="btn btn-primary" onclick="getQuery()" type="button">Search</button>-->
-                           <button class="btn btn-primary" type="button">Search</button>
-                         </span>
-                    </div>
-
-                  </div>
-                </div>
-            </form>
-             </div>
-             </div>
-            
-             <div class="col-md-3">
-              <ul class="nav navbar-nav">
-                <li><a href="#" id="instructor">instructor</a></li>
-                <li><a href="#" id="course_id">course id</a></li>
-                <li><a href="#" id="course_name">course name</a></li>
-              </ul>
-            </div>
-
-             <div class="col-md-2" style="float: right;">
-                <div class="navbar navbar-inverse" role="banner">
-                    <nav class="collapse navbar-collapse bs-navbar-collapse navbar-right" role="navigation">
-                      <ul class="nav navbar-nav">
-                        <li class="dropdown">
-                          <a href="#" class="dropdown-toggle" data-toggle="dropdown">My Account <b class="caret"></b></a>
-                          <ul class="dropdown-menu animated fadeInUp">
-                            <li><a href="profile">Profile</a></li>
-                            <li><a href="#">Signout</a></li>
-                          </ul>
-                        </li>
-                      </ul>
-                    </nav>
-                </div>
-             </div>
-
-
-          </div>
-       </div>
-  </div>
-
- <div role="main" class="page-content container-fluid">
-  <div class="row">
-        
-
-
-
-      <div>
-        <h2>Search Results</h2>
-        <p> hi: {{session.username}}</p>
-
-
-    <div class="container">
-      <div id="disp" class="jumbotron mt-3">        
-      </div>
-    </div>
-    </div>
-    </div>
-  </div>
-
-
-     <footer style="position:fixed; bottom:0;height:40px;width: 100%;">
-            <div class="text-center">
-               Copyright 2018 <a href=#>USC Tutor Finder</a>
-            </div>
-      </footer>
-
-      
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster 
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script>window.jQuery || document.write('<script src="../../../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>-->
-    
-
-  </body>
-</html>
+function upHist(data){
+    $.post("/upHist", {"upHist": data,"user":"{{session.username}}"})
+}
+  </script> 
+  <div class="header"> 
+   <div class="container"> 
+    <div class="row"> 
+     <div class="col-md-4"> 
+      <!-- Logo --> 
+      <div class="logo"> 
+       <h1><a href="/">USC Tutor Finder</a></h1> 
+      </div> 
+     </div> 
+     <div class="col-md-3"> 
+      <div class="col-md-7"> 
+       <form action="/hms/accommodations" method="GET"> 
+       </form> 
+      </div> 
+     </div> 
+     <div class="col-md-2" style="float: right;"> 
+      <div class="navbar navbar-inverse" role="banner"> 
+       <nav class="collapse navbar-collapse bs-navbar-collapse navbar-right" role="navigation"> 
+        <ul class="nav navbar-nav"> 
+         <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown">My Account <b class="caret"></b></a> 
+          <ul class="dropdown-menu animated fadeInUp"> 
+           <li><a href="profile">Profile</a></li> 
+           <li><a href="#">Signout</a></li> 
+          </ul> </li> 
+        </ul> 
+       </nav> 
+      </div> 
+     </div> 
+    </div> 
+   </div> 
+  </div> 
+  <div role="main" class="page-content container-fluid"> 
+   <div class="container"> 
+    <div id="disp" class="jumbotron mt-3"> 
+     <p> Hi, {{session.username}}@usc.edu</p> 
+    </div> 
+   </div> 
+  </div> 
+  <footer style="position:fixed; bottom:0;height:40px;width: 100%;"> 
+   <div class="text-center">
+     Copyright 2018 
+    <a href="#">USC Tutor Finder</a> 
+   </div> 
+  </footer>    
+ </body>
 </html>

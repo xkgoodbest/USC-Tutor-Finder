@@ -92,20 +92,59 @@ def searchItems(jsdata):
 		will=[]
 		for oneStudent in studentData.keys():
 			if studentData[oneStudent].has_key('will'):
-				for aCourse in studentData[oneStudent]['will']:
-					if aCourse['courseID']==oneCourse['courseID'] and aCourse['instructors']==oneCourse['courseInstructors']:
+				for aCourse in studentData[oneStudent]['will'].keys():
+					if studentData[oneStudent]['will'][aCourse]['courseID']==oneCourse['courseID'] and studentData[oneStudent]['will'][aCourse]['instructors']==oneCourse['courseInstructors']:
 						will.append(studentData[oneStudent]['email'])
 		oneCourse['willToTutor']=will
 	return jsonify(returnList)
 
+@app.route('/tutorAdd', methods = ['POST'])
+def tutorAdd():
+	courseID=request.form['courseInf'].split('_')[0]
+	instructors=request.form['courseInf'].split('_')[1]
+	tutorEmail=request.form['tutorEmail']
+	my=request.form['my']
+	print courseID,instructors,tutorEmail,my
+	if tutorEmail!="Not selected":
+		firebase1 = firebase.FirebaseApplication('https://inf551uscstudent.firebaseio.com/', None)
+		tutor=tutorEmail.split('@')[0]
+		tutors=firebase1.get(my,'tutor');
+		students=firebase1.get(tutor,'student');
+		exist=False
+		if students!=None:
+			for i in students.keys():
+				if (students[i]['courseID']==courseID and students[i]['instructors']==instructors and students[i]['email']==my+"@usc.edu") or my==tutor:
+					exist=True
+					break
+		if exist==False and tutor!=my:
+			firebase1.post(tutor+'/student', {'courseID':courseID,'instructors':instructors,'email':my+"@usc.edu"})
+			firebase1.post(my+'/tutor', {'courseID':courseID,'instructors':instructors,'email':tutor+"@usc.edu"})
+			return "success"
+	return "fail"
+
+@app.route('/willAdd', methods = ['POST'])
+def willAdd():
+	courseID=request.form['courseInf'].split('_')[1]
+	instructors=request.form['courseInf'].split('_')[2]
+	my=request.form['my']
+	firebase1 = firebase.FirebaseApplication('https://inf551uscstudent.firebaseio.com/', None)
+	wills=firebase1.get(my,'will');
+	exist=False
+	if wills!=None:
+		for i in wills.keys():
+			if wills[i]['courseID']==courseID and wills[i]['instructors']==instructors:
+				exist=True
+				break
+	if exist==False:
+		firebase1.post(my+'/will', {'courseID':courseID,'instructors':instructors})
+		return 'success'
+	return "fail"
 @app.route('/upHist', methods = ['POST'])
 def upHist():
-	print request.form['upHist']
-	print request.form['user']
-	firebase1 = firebase.FirebaseApplication('https://inf551uscstudent.firebaseio.com/', None)
-	firebase1.post(request.form['user']+'/History', request.form['upHist'])
+	if request.form['upHist']!="":
+		firebase1 = firebase.FirebaseApplication('https://inf551uscstudent.firebaseio.com/', None)
+		firebase1.post(request.form['user']+'/History', request.form['upHist'])
 	return "received"
-
 class ProfileEdit(Form):
 	email = StringField("Email", [validators.Length(min = 1, max = 50)])
 	name  = StringField("Full Name", [validators.Length(min = 1, max = 30)])

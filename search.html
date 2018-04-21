@@ -25,13 +25,20 @@
  <body> 
   <script>
 $(document).ready(function() {
+
+    // Setup - add a text input to each footer cell
     $('#example tfoot th').each(function() {
         var title = $(this).text();
         $(this).html('<input type="text" placeholder="Search ' + title + '" />');
     });
+
+    // DataTable
     var table = $('#example').DataTable();
+
+    // Apply the search
     table.columns().every(function() {
         var that = this;
+
         $('input', this.footer()).on('keyup change',
         function() {
             if (that.search() !== this.value) {
@@ -41,37 +48,24 @@ $(document).ready(function() {
     });
 });
 
-function tutorAdd(a) {
-    console.log(a.id);
-    console.log(a.value);
-    $.post("/tutorAdd", {"courseInf": a.id,"tutorEmail":a.value,"my":"{{session.username}}"},function(data)
-    {
-        if (data=="fail"){
-          alert("Finding tutor failed");
-        }
-        else{
-          alert("You are paired with "+a.value+" in "+a.id);
-        }
+function logValue() {
+
+    console.log(this.value);
+    console.log(this);
+    $.ajax({
+        type: 'POST',
+        url: "/saveTutor",
+        url: "/searchItem/{\"query\":\"0 INF\"}",
+        contentType: "application/json; charset=utf-8",
+        dataType: 'json',
+
     });
-}
-function willAdd(a) {
-    console.log(a.id);
-    console.log(a.checked);
-    if (a.checked==true){
-      $.post("/willAdd", {"courseInf": a.id,"my":"{{session.username}}"},function(data)
-      {
-        if (data=="fail"){
-          alert("You're already a tutor in this course");
-        }
-        else{
-          alert("You are now a tutor");
-        }
-      });
-    }
 }
 function disp1(jsons) {
     var father = document.getElementById("disp");
+
     var thead = document.createElement("thead");
+
     var trhead = document.createElement("tr");
 
     var thhead1 = document.createElement("th");
@@ -132,26 +126,25 @@ function disp1(jsons) {
             z.setAttribute("id", jsons[i].willToTutor[j] + "_" + jsons[i].courseID + "_" + jsons[i].courseInstructors);
             z.appendChild(t);
             document.getElementById(jsons[i].courseID + "_" + jsons[i].courseInstructors).appendChild(z);
-
         }
-        x.setAttribute("onchange", "tutorAdd(this)");
+        x.addEventListener('click', logValue, false);
         para.appendChild(x);
         eachDIV.appendChild(para);
 
-        var willing=document.createElement("div");
-        var p=document.createElement("p");                
-        var willCheck = document.createElement("input");
-        var label = document.createElement("label");
-        willCheck.type = "checkbox";
-        willCheck.id="will"+"_"+jsons[i].courseID+"_"+jsons[i].courseInstructors;
-        willCheck.onclick = function(){
-            willAdd(this);
-        };               
-        willing.appendChild(willCheck);
-        willing.appendChild(label);
-        label.appendChild(document.createTextNode("Willing to tutor this course?"));
-        para.appendChild(willing);
-        eachDIV.appendChild(para);
+        /*var willing=document.createElement("div");
+                var p=document.createElement("p");                
+                var willCheck = document.createElement("input");
+                var label = document.createElement("label");
+                willCheck.type = "checkbox";
+                willCheck.id="will"+"_"+jsons[i].courseID+"_"+jsons[i].courseInstructors;
+                willCheck.onclick = function(){
+                    alert(willCheck.id);
+                };               
+                willing.appendChild(willCheck);
+                willing.appendChild(label);
+                label.appendChild(document.createTextNode("Willing to tutor this course?"));
+                para.appendChild(willing);
+                eachDIV.appendChild(para);*/
         element.appendChild(eachDIV);
     }
 
@@ -166,13 +159,10 @@ function disp1(jsons) {
     var thhead3 = document.createElement("th");
     var node3 = document.createTextNode("Course Name");
     thhead3.appendChild(node3);
-    var thhead4 = document.createElement("th");
-    var node4 = document.createTextNode("Tutors Available");
-    thhead4.appendChild(node4);
+
     trhead.appendChild(thhead1);
     trhead.appendChild(thhead2);
     trhead.appendChild(thhead3);
-    trhead.appendChild(thhead4);
     tfoot.appendChild(trhead);
 
     var table = document.createElement("table");
@@ -196,7 +186,7 @@ function disp1(jsons) {
             $('input', this.footer()).on('keydown',
             function(ev) {
                 if (ev.keyCode == 13) {
-                    console.log(this.value)
+                    console.log(1)
                     that.search(this.value).draw();
                     upHist(this.value);
                 }
@@ -206,6 +196,7 @@ function disp1(jsons) {
     var hid = document.getElementById("example_filter");
     hid.style.visibility = "hidden";
 }
+
 $.ajax({
     type: "GET",
     url: "/searchItem/{\"query\":\"0 INF\"}",

@@ -97,7 +97,20 @@ def searchItems(jsdata):
 						will.append(studentData[oneStudent]['email'])
 		oneCourse['willToTutor']=will
 	return jsonify(returnList)
-
+@app.route('/restPWD', methods = ['POST'])
+def restPWD():
+	oldPWD=request.form['oldPWD'];
+	newPWD=request.form['newPWD'];
+	conPWD=request.form['conPWD'];
+	my=request.form['my'];
+	if newPWD==conPWD:
+		firebase1 = firebase.FirebaseApplication('https://inf551uscstudent.firebaseio.com/', None)
+		old=firebase1.get(my, "password")
+		print type(oldPWD),type(old)
+		if str(oldPWD)==str(old):
+			firebase1.put(my, "password",newPWD)
+			return 'success'
+	return "fail"
 @app.route('/tutorAdd', methods = ['POST'])
 def tutorAdd():
 	courseID=request.form['courseInf'].split('_')[0]
@@ -170,9 +183,7 @@ def redToProfile():
 		form = FirePut()
 		if form.validate_on_submit():
 			putData = {}
-
 		return render_template('profile.html')
-
 	return render_template('profile.html', form=form)
 	
 @app.route('/reset_pwd')
@@ -181,5 +192,4 @@ def rest_pass():
 
 
 if __name__ == '__main__':
-	# run!
 	app.run(debug=True)

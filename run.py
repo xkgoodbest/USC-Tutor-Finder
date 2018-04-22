@@ -133,6 +133,19 @@ def restPWD():
 			firebase1.put(my, "password",newPWD)
 			return 'success'
 	return "fail"
+@app.route('/updateProfile', methods = ['POST'])
+def updateProfile():
+	firstName=request.form['firstName'];
+	lastName=request.form['lastName'];
+	status=request.form['status'];
+	phone=request.form['phone'];
+	my=request.form['my'];
+	firebase1 = firebase.FirebaseApplication('https://inf551uscstudent.firebaseio.com/', None)
+	firebase1.put(my,"firstName", firstName)
+	firebase1.put(my,"lastName", lastName)
+	firebase1.put(my,"status", status)
+	firebase1.put(my,"phone", phone)
+	return 'success'
 @app.route('/tutorAdd', methods = ['POST'])
 def tutorAdd():
 	courseID=request.form['courseInf'].split('_')[0]

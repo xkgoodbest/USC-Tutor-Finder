@@ -145,6 +145,10 @@
       
       });
       //submit button
+      var sub_firstname;
+      var sub_lastname;
+      var sub_status;
+      var sub_phone;
       $(document).on('click', '#btn', function() {
           $('#result').empty();
           $("#first").find('input').each(function() {
@@ -162,6 +166,7 @@
                 }
                 else{
                     $('#' + i).html("<p id=" + i + ">" + t + "</p>");
+                    sub_firstname = t;
                 }
               }
               if ($(this)[0].id == "contact_name") {
@@ -174,6 +179,7 @@
                 }
                 else{
                     $('#' + i).html("<p id=" + i + ">" + t + "</p>");
+                    sub_lastname = t;
                 }
               }
       
@@ -186,6 +192,7 @@
                 }
                 else{
                     $('#' + i).html("<p id=" + i + ">" + t + "</p>");
+                    sub_status = t;
                 }
               }
       
@@ -193,6 +200,7 @@
                   //check phone
                   isMatch = /^[0-9]{10}$/.test(t);
                   if (isMatch) {
+                      sub_phone = t;
                       if ($("#result").find("#danger2").length != 0) {
                           $('#danger2').remove();
                           $('#' + i).html("<p id=" + i + ">" + t + "</p>");
@@ -216,6 +224,21 @@
                   $('#cancel').remove();
                   var sub = $('<div id="success" class="alert alert-success"><strong>Success!</strong></div>');
                   $('#result').append(sub);
+                  //backend................................
+                  console.log(sub_firstname);
+                  console.log(sub_lastname);
+                  console.log(sub_status);
+                  console.log(sub_phone);
+                  $.post("/updateProfile", {"firstName": sub_firstname,"lastName":sub_lastname,"status":sub_status,"phone":sub_phone,"my":"{{session.username}}"},function(data)
+                  {
+                      if (data=="success"){
+                        alert("Saved");
+                      }
+                      else{
+                        alert("Wrong");
+                      }
+                  });
+                  ////////////////////////////////////////////////
                   setTimeout(function() {
                       if ($('#success').length > 0) {
                           $('#success').remove();

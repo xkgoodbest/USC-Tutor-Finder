@@ -310,8 +310,23 @@
                 cid = $("#tutor_table #body tr#"+remove_id+" td:nth-child(2)").text();
                 instruct = $("#tutor_table #body tr#"+remove_id+" td:nth-child(3)").text();
                 emailAddr = $("#tutor_table #body tr#"+remove_id+" td:nth-child(4)").text();
+
+
+                $.post("/tutorDel", {"courseID": cid,"instructors":instruct,"tutorEmail":emailAddr,"my":"{{session.username}}"},function(data)
+                {
+                    if (data=="fail"){
+                      alert("Delete tutor failed");
+                    }
+                    else{
+                      
+                      $('#tutor_table #body tr#'+remove_id).remove();
+                      alert("Deleted");
+                    }
+                });
+
+
                 ///////////////  
-                $('#tutor_table #body tr#'+remove_id).remove();
+                
             });
          
          });

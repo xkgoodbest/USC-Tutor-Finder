@@ -200,8 +200,8 @@ def willDel():
 
 @app.route('/tutorDel', methods = ['POST'])
 def tutorDel():
-	courseID=request.form['courseInf'].split('_')[1]
-	instructors=request.form['courseInf'].split('_')[2]
+	courseID=request.form['courseID']
+	instructors=request.form['instructors']
 	tutorEmail=request.form['tutorEmail']
 	my=request.form['my']
 	firebase1 = firebase.FirebaseApplication('https://inf551uscstudent.firebaseio.com/', None)

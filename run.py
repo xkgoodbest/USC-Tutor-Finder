@@ -175,6 +175,15 @@ def willAdd():
 		return 'success'
 	return "fail"
 
+@app.route('/HistoryDel', methods = ['POST'])
+def hisDel():
+	my=request.form['my']
+	firebase1 = firebase.FirebaseApplication('https://inf551uscstudent.firebaseio.com/', None)
+	firebase1.delete(my,'History')
+	return "success"
+
+
+
 @app.route('/willDel', methods = ['POST'])
 def willDel():
 	courseID=request.form['courseID']

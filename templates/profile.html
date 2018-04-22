@@ -366,8 +366,20 @@
 
        $(document).on('click','#clear_all',function(){
              
-            $('#history_table').find('#body').empty();
             //backend...........
+
+                $.post("/HistoryDel", {"my":"{{session.username}}"},function(data)
+                    {
+                        if (data=="success"){
+                          alert("success");
+                        }
+                        else{
+                          alert("Failed");
+                        }
+                    });
+
+            /////////////////////////////
+            $('#history_table').find('#body').empty();
 
           });
 

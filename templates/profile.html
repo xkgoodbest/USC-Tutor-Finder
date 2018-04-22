@@ -4,399 +4,477 @@
     <title>USC Tutor Finder</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
-
     <link href="{{url_for('static',filename='styles/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
-
     <link href="{{url_for('static',filename='styles/css/styles.css')}}" rel="stylesheet">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-	<script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
   </head>
   <body>
-  	<div class="header">
-	     <div class="container">
-	        <div class="row">
-	           <div class="col-md-5">
-	              <!-- Logo -->
-	              <div class="logo">
-	                 <h1><a href="/">USC Tutor Finder</a></h1>
-	              </div>
-	           </div>
-	           
-	           <div class="col-md-3" style="float: right;">
-	           	<div class="col-md-5">
-	           		<form action="/hms/accommodations" method="GET">
-	              <div class="row">
-	                <div class="col-sm-12">
-	                  <div class="input-group form" >
-	                       <!--input type="text" id ="search" class="form-control" placeholder="Search..." style="width: 220px;"-->
-	                       <span class="input-group-btn"  >
-	                         <!--button class="btn btn-primary" type="button">Search</button-->
-	                       </span>
-	                  </div>
-	                </div>
-	              </div>
-	          </form>
-	           </div>
-	           </div>
-	        </div>
-	     </div>
-	</div>
-
+    <div class="header">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-5">
+            <!-- Logo -->
+            <div class="logo">
+              <h1><a href="/">USC Tutor Finder</a></h1>
+            </div>
+          </div>
+          <div class="col-md-3" style="float: right;">
+            <div class="col-md-5">
+              <form action="/hms/accommodations" method="GET">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="input-group form" >
+                      <!--input type="text" id ="search" class="form-control" placeholder="Search..." style="width: 220px;"-->
+                      <span class="input-group-btn"  >
+                        <!--button class="btn btn-primary" type="button">Search</button-->
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="page-content">
-    	<div class="row">
-		  <div class="col-md-2">
-		  	<div class="sidebar content-box" style="display: block;">
-                <ul class="nav">
-                    <!-- Main menu -->
-                    <li class="current"><a href="profile"><i class="glyphicon glyphicon-home"></i> Dashboard</a></li>
-                    <li><a href="search"><i class="glyphicon glyphicon-tasks"></i> Search</a></li>
-                    <li><a href="reset_pwd"><i class="glyphicon glyphicon-tasks"></i> Reset Pwd</a></li>
-                    <li><a href="signout"><i class="glyphicon glyphicon-tasks"></i> SignOut</a></li>
-                </ul>
-             </div>
-		  </div>
-
-
-<script>
-var allData;
-$.ajax({
-    type: "GET",
-    url: "/fetchProfile/{\"query\":\"{{session.username}}\"}",
-    contentType: "application/json; charset=utf-8",
-    dataType: 'json',
-    success: function(data) {
-        console.log(data);
-        allData = data;
-    }
-});
-
-var u;
-var c;
-var e;
-var p;
-
-$.fn.inputbox = function() {
-    this.each(function() {
-        if (!($(this).find('input').length)) {
-            //if input not exist
-            var i = $(this)[0].id
-            var t = $(this).text();
-            //change to inputbox
-            //$(this).html("<input type=text"+" id="+i+" value=\""+t+"\">");
-            if ((this.id) == 'user_name') {
-                $(this).html("<input type=text" + " id=" + i + " value=\"" + t + "\" placeholder=\"username\">");
-            }
-            if ((this.id) == 'contact_name') {
-                $(this).html("<input type=text" + " id=" + i + " value=\"" + t + "\" placeholder=\"contact name\">");
-            }
-            if ((this.id) == 'email') {
-                $(this).html("<input type=text" + " id=" + i + " value=\"" + t + "\" pattern=\".+@usc.edu\" required title=\"123@usc.edu\" placeholder=\"123@usc.edu\">");
-            }
-            if ((this.id) == 'phone') {
-                $(this).html("<input type=tel" + " id=" + i + " value=\"" + t + "\" placeholder=\"(555)555-5555\">");
-            }
-
-        }
-    });
-};
-
-$(document).on('click', '#edit', function() {
-    var sub = $('<button type="button" class="btn btn-primary" id="btn">submit</button>');
-    var cancel = $('<button type="button" class="btn btn-primary" id="cancel" style="margin-left:10px;">cancel</button>');
-
-    //append button
-    if ($("#first").find("#btn").length == 0) {
-
-        $('#add_button').append(sub);
-        $('#add_button').append(cancel);
-
-        //change to inputbox
-        $("#first").find('p').inputbox();
-        $("#first").find('input').each(function() {
-
-            if ((this.id) == 'user_name') {
-                u = $(this).val();
-            }
-            if ((this.id) == 'contact_name') {
-                c = $(this).val();
-            }
-            if ((this.id) == 'email') {
-                e = $(this).val();
-            }
-            if ((this.id) == 'phone') {
-                p = $(this).val();
-            }
-        });
-    } else {
-        //if button existed
-        alert("please click on either submit or cancel")
-    }
-
-});
-//submit button
-$(document).on('click', '#btn', function() {
-    $("#first").find('input').each(function() {
-        var i = $(this)[0].id
-        var t = $(this).val();
-        var isMatch;
-
-        if ($(this)[0].id == "email") {
-            //check email
-            isMatch = /^[a-zA-Z0-9._-]+@usc.edu$/.test(t);
-            if (isMatch) {
-                //if has alert, remove and change to p
-                if ($("#result").find("#danger1").length != 0) {
-                    $('#danger1').empty();
-                    $('#danger1').remove();
-                    $('#' + i).html("<p id=" + i + ">" + t + "</p>");
-                } else {
-                    //if not, change to p
-                    $('#' + i).html("<p id=" + i + ">" + t + "</p>");
-                }
-            } else {
-                //wrong append
-                //if wrong, but no warn yet, append
-                if ($("#result").find("#danger1").length == 0) {
-                    var sub = $('<div id="danger1" class="alert alert-danger"><strong>Wrong Email Format</strong></div>');
-                    $('#result').append(sub);
-                }
-            }
-        }
-
-        if ($(this)[0].id == "phone") {
-            //check phone
-            isMatch = /^[0-9]{10}$/.test(t);
-            if (isMatch) {
-                if ($("#result").find("#danger2").length != 0) {
-                    $('#danger2').remove();
-                    $('#' + i).html("<p id=" + i + ">" + t + "</p>");
-                } else {
-                    $('#' + i).html("<p id=" + i + ">" + t + "</p>");
-                }
-            } else {
-                //wrong append
-                if ($("#result").find("#danger2").length == 0) {
-                    var sub = $('<div id="danger2" class="alert alert-danger"><strong>Wrong Phone Format</strong></div>');
-                    $('#result').append(sub);
-                }
-            }
-        }
-
-        if ($(this)[0].id == "user_name") {
-            $('#' + i).html("<p id=" + i + ">" + t + "</p>");
-        }
-        if ($(this)[0].id == "contact_name") {
-            $('#' + i).html("<p id=" + i + ">" + t + "</p>");
-        }
-
-    });
-    //alert(check);
-    if ($("#result").has("div").length == 0) {
-        if ($("#first").find("#btn").length != 0) {
-            $('#btn').remove();
-            $('#cancel').remove();
-            var sub = $('<div id="success" class="alert alert-success"><strong>Success!</strong></div>');
-            $('#result').append(sub);
-            setTimeout(function() {
-                if ($('#success').length > 0) {
-                    $('#success').remove();
-                }
-            }, 1000)
-        }
-    }
-
-
-});
-//cancel button 
-
-$(document).on('click', '#cancel', function() {
-    $("#first").find('input').each(function() {
-        var i = $(this)[0].id
-        //var t = $(this).val();
-        //$('#'+i).html("<p id="+i+">"+t+"</p>");
-
-        if ($(this)[0].id == "user_name") {
-
-            $('#' + i).html("<p id=" + i + ">" + u + "</p>");
-        }
-        if ($(this)[0].id == "contact_name") {
-
-            $('#' + i).html("<p id=" + i + ">" + c + "</p>");
-        }
-        if ($(this)[0].id == "email") {
-
-            $('#' + i).html("<p id=" + i + ">" + e + "</p>");
-        }
-        if ($(this)[0].id == "phone") {
-
-            $('#' + i).html("<p id=" + i + ">" + p + "</p>");
-        }
-
-        if ($("#result").has("div").length > 0) {
-            //alert("inside"+check);
-            $("#result").empty();
-        }
-        if ($("#first").find("#btn").length != 0) {
-            $('#btn').remove();
-            $('#cancel').remove();
-        }
-
-
-    });
-
-});
-</script>
-
-
-
-
-		  <div class="col-md-10">
-		  	<div class="row">
-
-		  		<div class="col-md-10">
-		  				<div class="content-box-large">
-			  				<div class="panel-heading">
-					            <div class="panel-title">Basic Information</div>
-					        				          
-					            <div class="panel-options">
-					            	<a href='#'><i id="edit" class="glyphicon glyphicon-cog"></i></a>
-					            </div>
-
-					        </div>
-					        <br/>
-                  <div id ="result"></div>
-					        <!-- <br/><div id="danger1"></div>
-                  <div id="danger2"></div>-->
-               
-					        
-					        <div class="panel-body">
-			  				<form id="first" class="form-horizontal" role="form">
-			  						<div class="form-group">
-								    <label for="inputEmail3" class="col-sm-2 control-label">User Name</label>   
-								    		<div class="col-sm-10" style= "margin-top: 14px;">
-								     			<p id="user_name">First Element</p>
-								    		</div>
-								  </div>
-								  	
-								  	<div class="form-group">
-								    <label for="inputEmail3" class="col-sm-2 control-label">Contact Name</label>
-								    		<div class="col-sm-10" style= "margin-top: 14px;">
-								      			<p id="contact_name">second Element</p>
-								    		</div>
-								  	</div>
-
-								  	<div class="form-group">
-								    <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
-								    	<div class="col-sm-10" style= "margin-top: 8px;">
-								      		<p id="email">third Element</p>
-								    	</div>
-								  	</div>
-
-								  <div class="form-group">
-								    <label for="inputEmail3" class="col-sm-2 control-label">Phone</label>
-								    	<div class="col-sm-10" style= "margin-top: 6px;">
-								      		<p id="phone">forth Element</p>
-								    	</div>
-								  </div>
-								   <div style="float: left;" id="add_button">
-
-      							   </div>
+    <div class="row">
+    <div class="col-md-2">
+      <div class="sidebar content-box" style="display: block;">
+        <ul class="nav">
+          <!-- Main menu -->
+          <li class="current"><a href="profile"><i class="glyphicon glyphicon-home"></i> Dashboard</a></li>
+          <li><a href="search"><i class="glyphicon glyphicon-tasks"></i> Search</a></li>
+          <li><a href="reset_pwd"><i class="glyphicon glyphicon-tasks"></i> Reset Pwd</a></li>
+          <li><a href="signout"><i class="glyphicon glyphicon-tasks"></i> SignOut</a></li>
+        </ul>
+      </div>
+    </div>
+    <script>
+      var allData;
+      $.ajax({
+          type: "GET",
+          url: "/fetchProfile/{\"query\":\"{{session.username}}\"}",
+          contentType: "application/json; charset=utf-8",
+          dataType: 'json',
+          success: function(data) {
+              console.log(data);
+              
+              //2allData = data;
+              script1(data);
       
-								
-								</form>
-			  			</div>
-		  		</div>
-		  	</div>
-
- 
-<script>
-
-
-$(document).on('click','#tutor_edit',function(){
-  if($("#tutor_table").find('tbody').find('tr').find('b').length == 0){
-     $("#tutor_table").find('tr').each(function(){
-          if(this.id != "head"){
-            $(this).append('<td><b id='+this.id +' class="btn-sm btn-danger remove-me field-input">x</b></td>');
+      
+      //alert(firstname);
+             
           }
       });
-   }else{
-         //var s = $("#tutor_table").find('tbody').find('tr').find('b').length;
-          $('b').closest('td').html('');
-    
-    
-   }
-});
-
-
-
-      $("#tutor_table").find('b').each(function(){
-             $(this).on('click',function(){
-
+      
+      function script1(data){     
+      
+      var firstname = data.firstName;
+      $('#first').find('#user_name').text(firstname);
+      var lastname = data.lastName;
+      $('#first').find('#contact_name').text(lastname);
+      var phone = data.phone;
+      $('#first').find('#phone').text(phone);
+      var status = data.status;
+      $('#first').find('#email').text(status);
+      
+      var u;
+      var c;
+      var e;
+      var p;
+      
+      $.fn.inputbox = function() {
+          this.each(function() {
+              if (!($(this).find('input').length)) {
+                  //if input not exist
+                  var i = $(this)[0].id
+                  var t = $(this).text();
+                  //change to inputbox
+                  //$(this).html("<input type=text"+" id="+i+" value=\""+t+"\">");
+                  if ((this.id) == 'user_name') {
+                      $(this).html("<input type=text" + " id=" + i + " value=\"" + t + "\" placeholder=\"Firstname\">");
+                  }
+                  if ((this.id) == 'contact_name') {
+                      $(this).html("<input type=text" + " id=" + i + " value=\"" + t + "\" placeholder=\"Lastname\">");
+                  }
+                  if ((this.id) == 'email') {
+                      $(this).html("<input type=text" + " id=" + i + " value=\"" + t + "\" placeholder=\"freshman or...\">");
+                  }
+                  if ((this.id) == 'phone') {
+                      $(this).html("<input type=tel" + " id=" + i + " value=\"" + t + "\" placeholder=\"(555)555-5555\">");
+                  }
+      
+              }
+          });
+      };
+      
+      $(document).on('click', '#edit', function() {
+          var sub = $('<button type="button" class="btn btn-primary" id="btn">submit</button>');
+          var cancel = $('<button type="button" class="btn btn-primary" id="cancel" style="margin-left:10px;">cancel</button>');
+      
+          //append button
+          if ($("#first").find("#btn").length == 0) {
+      
+              $('#add_button').append(sub);
+              $('#add_button').append(cancel);
+      
+              //change to inputbox
+              $("#first").find('p').inputbox();
+              $("#first").find('input').each(function() {
+      
+                  if ((this.id) == 'user_name') {
+                      u = $(this).val();
+                  }
+                  if ((this.id) == 'contact_name') {
+                      c = $(this).val();
+                  }
+                  if ((this.id) == 'email') {
+                      e = $(this).val();
+                  }
+                  if ((this.id) == 'phone') {
+                      p = $(this).val();
+                  }
+              });
+          } else {
+              //if button existed
+              alert("please click on either submit or cancel")
+          }
+      
       });
-        
-   
-  });
+      //submit button
+      $(document).on('click', '#btn', function() {
+          $('#result').empty();
+          $("#first").find('input').each(function() {
+              var i = $(this)[0].id
+              var t = $(this).val();
+              var isMatch;
+      
+      
+              if ($(this)[0].id == "user_name") {
+                    if($(this).val().length == 0){
+                      if ($("#result").find("#danger3").length == 0) {
+                          var sub = $('<div id="danger3" class="alert alert-danger"><strong>Wrong Firstname Format</strong></div>');
+                          $('#result').append(sub);
+                      }
+                }
+                else{
+                    $('#' + i).html("<p id=" + i + ">" + t + "</p>");
+                }
+              }
+              if ($(this)[0].id == "contact_name") {
+                  
+                  if($(this).val().length == 0){
+                      if ($("#result").find("#danger4").length == 0) {
+                          var sub = $('<div id="danger4" class="alert alert-danger"><strong>Wrong Lastname Format</strong></div>');
+                          $('#result').append(sub);
+                      }
+                }
+                else{
+                    $('#' + i).html("<p id=" + i + ">" + t + "</p>");
+                }
+              }
+      
+              if ($(this)[0].id == "email") {
+                  if($(this).val().length == 0){
+                      if ($("#result").find("#danger1").length == 0) {
+                          var sub = $('<div id="danger1" class="alert alert-danger"><strong>Wrong Status Format</strong></div>');
+                          $('#result').append(sub);
+                      }
+                }
+                else{
+                    $('#' + i).html("<p id=" + i + ">" + t + "</p>");
+                }
+              }
+      
+              if ($(this)[0].id == "phone") {
+                  //check phone
+                  isMatch = /^[0-9]{10}$/.test(t);
+                  if (isMatch) {
+                      if ($("#result").find("#danger2").length != 0) {
+                          $('#danger2').remove();
+                          $('#' + i).html("<p id=" + i + ">" + t + "</p>");
+                      } else {
+                          $('#' + i).html("<p id=" + i + ">" + t + "</p>");
+                      }
+                  } else {
+                      //wrong append
+                      if ($("#result").find("#danger2").length == 0) {
+                          var sub = $('<div id="danger2" class="alert alert-danger"><strong>Wrong Phone Format</strong></div>');
+                          $('#result').append(sub);
+                      }
+                  }
+              }
+      
+          });
+          //alert(check);
+          if ($("#result").has("div").length == 0) {
+              if ($("#first").find("#btn").length != 0) {
+                  $('#btn').remove();
+                  $('#cancel').remove();
+                  var sub = $('<div id="success" class="alert alert-success"><strong>Success!</strong></div>');
+                  $('#result').append(sub);
+                  setTimeout(function() {
+                      if ($('#success').length > 0) {
+                          $('#success').remove();
+                      }
+                  }, 1000)
+              }
+          }
+      
+      
+      });
+      //cancel button 
+      
+      $(document).on('click', '#cancel', function() {
+          $("#first").find('input').each(function() {
+              var i = $(this)[0].id
+              //var t = $(this).val();
+              //$('#'+i).html("<p id="+i+">"+t+"</p>");
+      
+              if ($(this)[0].id == "user_name") {
+      
+                  $('#' + i).html("<p id=" + i + ">" + u + "</p>");
+              }
+              if ($(this)[0].id == "contact_name") {
+      
+                  $('#' + i).html("<p id=" + i + ">" + c + "</p>");
+              }
+              if ($(this)[0].id == "email") {
+      
+                  $('#' + i).html("<p id=" + i + ">" + e + "</p>");
+              }
+              if ($(this)[0].id == "phone") {
+      
+                  $('#' + i).html("<p id=" + i + ">" + p + "</p>");
+              }
+      
+              if ($("#result").has("div").length > 0) {
+                  //alert("inside"+check);
+                  $("#result").empty();
+              }
+              if ($("#first").find("#btn").length != 0) {
+                  $('#btn').remove();
+                  $('#cancel').remove();
+              }
+      
+      
+          });
+      
+      });
+      
+      //your tutor table construct....
+      var length = data.tutor.length;
+      //console.log(length);
+      var p;
+      for (p = 0; p < length; p++) {
+      
+      var courseID = data.tutor[p].courseID;
+      var instructor = data.tutor[p].instructors;
+      var email = data.tutor[p].email;
+      var sub_id = email.substr(0, email.indexOf('@')); 
+      //console.log(sub_id);
+      var tr_id = courseID+instructor+sub_id;
+      tr_id=tr_id.replace(/ /g,'');
+      tr_id=tr_id.replace(/-/g,'');
+      tr_id=tr_id.replace(/,/g,'');
+      //tr_id=tr_id.replace(/\.@/g,'');
+      //tr_id=tr_id.repalce('.', '');
+      //console.log(tr_id);
+      $('#tutor_table').find('#body').append($('<tr id='+tr_id+'>'));
+      $('#tutor_table #body').find('#'+tr_id).append('<td>></td>');
+      $('#tutor_table').find('#body').find('#'+tr_id).append('<td>'+courseID+'</td>');
+      $('#tutor_table').find('#body').find("#"+tr_id).append('<td>'+instructor+'</td>');
+      $('#tutor_table').find('#body').find("#"+tr_id).append('<td>'+email+'</td>');
+      }
 
-    
+      var cid;
+      var instruct;
+      var emailAddr;
 
-</script>
+      
+      $(document).on('click','#tutor_edit',function(){
+        if($("#tutor_table").find('tbody').find('tr').find('b').length == 0){
+           $("#tutor_table").find('tr').each(function(){
+                if(this.id != "head"){
+                  $(this).append('<td id='+this.id+'><b class="btn-sm btn-danger remove-me field-input">x</b></td>');
+                }
+            });
+        $("#tutor_table").find('tbody').find('tr').find('b').each(function(){
+            $(this).on('click',function(){
+                
+                remove_id = $(this).closest('td').attr('id');
+                //backend.......
+                cid = $("#tutor_table #body tr#"+remove_id+" td:nth-child(2)").text();
+                instruct = $("#tutor_table #body tr#"+remove_id+" td:nth-child(3)").text();
+                emailAddr = $("#tutor_table #body tr#"+remove_id+" td:nth-child(4)").text();
+                ///////////////  
+                $('#tutor_table #body tr#'+remove_id).remove();
+            });
+         
+         });
 
-          <div class="col-md-10">
-            <div class="row">
-                  <div class="content-box-large">
-          <div class="panel-heading">
-          <div class="panel-title">Your Tutor</div>
-           <div style="float: right;">
-              <a href='#'><i id="tutor_edit" class="glyphicon glyphicon-cog"></i></a>
+         }else{
+               //var s = $("#tutor_table").find('tbody').find('tr').find('b').length;
+                $('b').closest('td').html('');
+         }
+      });
+      
+      //search history...
+      length = data.History.length;
+      
+      for (p = 0; p < length; p++) {
+      
+      var his = data.History[p];
+
+      tr_id = his;
+      tr_id=tr_id.replace(/ /g,'');
+      tr_id=tr_id.replace(/-/g,'');
+      tr_id=tr_id.replace(/,/g,'');
+      
+      $('#history_table').find('#body').append($('<tr id='+tr_id+'>'));
+      $('#history_table').find('#body').find('#'+tr_id).append('<td>'+his+'</td>');
+      }
+       $(document).on('click','#history',function(){
+             
+              if($("#history_parent").find("#clear_all").length == 0){
+
+                var btn = $('<button type="button" class="btn btn-primary" style="margin-right:20px;" id="clear_all">clear all</button>');
+                $("#history_parent").prepend(btn);
+              }
+              else{
+                $("#history_parent").find("#clear_all").remove();
+              }
+          });
+
+       $(document).on('click','#clear_all',function(){
+             
+            $('#history_table').find('#body').empty();
+            //backend...........
+
+          });
+
+      
+      }
+    </script>
+    <div class="col-md-10">
+      <div class="row">
+        <div class="col-md-10">
+          <div class="content-box-large">
+            <div class="panel-heading">
+              <div class="panel-title">Hi, {{session.username}}</div>
+              <div class="panel-options">
+                <button type="button" class="btn btn-default btn-sm">
+                <i id="edit" class="glyphicon glyphicon-cog" ></i>
+              </button>
+              </div>
             </div>
+            <br/>
+            <div id ="result"></div>
+            <!-- <br/><div id="danger1"></div>
+              <div id="danger2"></div>-->
+            <div class="panel-body">
+              <form id="first" class="form-horizontal" role="form">
+                <div class="form-group">
+                  <label for="inputEmail3" class="col-sm-2 control-label">FirstName</label>   
+                  <div class="col-sm-10" style= "margin-top: 14px;">
+                    <p id="user_name"></p>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="inputEmail3" class="col-sm-2 control-label">LastName</label>
+                  <div class="col-sm-10" style= "margin-top: 14px;">
+                    <p id="contact_name"></p>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="inputEmail3" class="col-sm-2 control-label">Status</label>
+                  <div class="col-sm-10" style= "margin-top: 8px;">
+                    <p id="email"></p>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="inputEmail3" class="col-sm-2 control-label">Phone</label>
+                  <div class="col-sm-10" style= "margin-top: 6px;">
+                    <p id="phone"></p>
+                  </div>
+                </div>
+                <div style="float: left;" id="add_button">
+                </div>
+              </form>
+            </div>
+          </div>
         </div>
-          <div class="panel-body">
-            <div class="table-responsive">
-              <table class="table" id="tutor_table">
+     
+        <div class="col-md-10">
+          <div class="row">
+            
+            <div class="content-box-large">
+              <div class="panel-heading">
+                <div class="panel-title">Search History</div>
+                <div style="float: right;" id='history_parent'>
+                  <button type="button" class="btn btn-default btn-sm">
+                    <i id='history' class="glyphicon glyphicon-cog" ></i>
+                    <!--<a href='#'><i id="tutor_edit" class="glyphicon glyphicon-cog"></i></a>-->
+                  </button>
+                  
+                </div>
+              </div>
+                <div class="panel-body">
+                <table class="table table-bordered" id="history_table">
+                      <tbody id='body'>
+                      
+                      </tbody>
+                    </table>
+              </div>
+            </div>
+
+
+
+            <div class="content-box-large">
+              <div class="panel-heading">
+                <div class="panel-title">Your Tutor</div>
+                <div style="float: right;">
+                  <button type="button" class="btn btn-default btn-sm">
+                    <i id="tutor_edit" class="glyphicon glyphicon-cog" ></i>
+                    <!--<a href='#'><i id="tutor_edit" class="glyphicon glyphicon-cog"></i></a>-->
+                  </button>
+                  
+                </div>
+              </div>
+              <div class="panel-body">
+                <div class="table-responsive">
+                  <table class="table" id="tutor_table">
                     <thead>
                       <tr id="head">
                         <th>#</th>
                         <th>Course ID</th>
                         <th>Instructors</th>
                         <th>Email</th>
-                       
                       </tr>
                     </thead>
-                    <tbody>
-                      <tr id="1">
-                        <td>></td>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                        
-                      </tr>
-                      <tr id='2'>
-                        <td>></td>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                      </tr>
-                      <tr id='3'>
-                        <td>></td>
-                        <td>Larry</td>
-                        <td>the Bird</td>
-                        <td>@twitter</td>
-                      </tr>
+                    <tbody id='body'>
                     </tbody>
                   </table>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-          <div class="content-box-large">
-          <div class="panel-heading">
-          <div class="panel-title">Your Student</div>
-           <div style="float: right;">
-              <a href='#'><i id="student_edit" class="glyphicon glyphicon-cog"></i></a>
-            </div>
-        </div>
-          <div class="panel-body">
-            <div class="table-responsive">
-              <table class="table">
+            <div class="content-box-large">
+              <div class="panel-heading">
+                <div class="panel-title">Your Student</div>
+                <div style="float: right;">
+                  <button type="button" class="btn btn-default btn-sm">
+                    <i id="student_edit" class="glyphicon glyphicon-cog" ></i>
+                    <!--<a href='#'><i id="tutor_edit" class="glyphicon glyphicon-cog"></i></a>-->
+                  </button>
+                  
+                </div>
+              </div>
+              <div class="panel-body">
+                <div class="table-responsive">
+                  <table class="table">
                     <thead>
                       <tr >
                         <th>#</th>
@@ -406,112 +484,69 @@ $(document).on('click','#tutor_edit',function(){
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>1</td>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                        <td><span id='+input_val+' class="btn-sm btn-danger remove-me field-input">x</span></td>
-                      </tr>
-                      <tr>
-                        <td>2</td>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                      </tr>
-                      <tr>
-                        <td>3</td>
-                        <td>Larry</td>
-                        <td>the Bird</td>
-                        <td>@twitter</td>
-                      </tr>
+                    
                     </tbody>
                   </table>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-
-        <div class="content-box-large">
-          <div class="panel-heading">
-          <div class="panel-title">Your Will</div>
-           <div style="float: right;">
-              <a href='#'><i id="will_edit" class="glyphicon glyphicon-cog"></i></a>
-            </div>
-        </div>
-          <div class="panel-body">
-            <div class="table-responsive">
-              <table class="table">
+            <div class="content-box-large">
+              <div class="panel-heading">
+                <div class="panel-title">Your Will</div>
+                <div style="float: right;">
+                  <button type="button" class="btn btn-default btn-sm">
+                    <i class="glyphicon glyphicon-cog" ></i>
+                    <!--<a href='#'><i id="tutor_edit" class="glyphicon glyphicon-cog"></i></a>-->
+                  </button>
+                </div>
+              </div>
+              <div class="panel-body">
+                <div class="table-responsive">
+                  <table class="table">
                     <thead>
                       <tr>
                         <th>#</th>
                         <th>Course ID</th>
                         <th>Instructor</th>
-                        
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>1</td>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                      </tr>
-                      <tr>
-                        <td>2</td>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                      </tr>
-                      <tr>
-                        <td>3</td>
-                        <td>Larry</td>
-                        <td>the Bird</td>
-                        <td>@twitter</td>
-                      </tr>
+                      
+                      
                     </tbody>
                   </table>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-        </div>
-      </div>
-
-  <!-- row-->
-  </div>
-  <!-- page content-->
-  </div>
-<script>
-  $(document).on('click','#history',function(){
-          if($("#history_parent").has("button").length == 0){
-            var btn = $('<button type="button" class="btn btn-primary" style="margin-right:20px; id="clear_all">clear</button>');
-            $(this).before(btn);
-          }else{
-            $("#history_parent").find("button").remove();
-          }
-      });
-
-   $.fn.inputbox = function(){
-        this.each(function(){
         
-
-        };
-      };
-
-</script>
-
-
-    <footer style="position:fixed; bottom:0;height:40px;width: 100%;">
-            <div class="text-center">
-               Copyright 2018 <a href="/">USC Tutor Finder</a>
+        <!-- 
             </div>
-      </footer>
-
+        </div>
+          row-->
+      </div>
+      <!-- page content-->
+    </div>
+    <script>
+     
+       $.fn.inputbox = function(){
+            this.each(function(){
+            
+      
+            });
+          };
+      
+    </script>
+  </br>
+</br>
+    <footer style="position:fixed; bottom:0;height:40px;width: 100%;">
+      <div class="text-center">
+        Copyright 2018 <a href="/">USC Tutor Finder</a>
+      </div>
+    </footer>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) 
-     <script src="https://code.jquery.com/jquery.js"></script>-->
-   
+      <script src="https://code.jquery.com/jquery.js"></script>-->
     <!-- Include all compiled plugins (below), or include individual files as needed 
-    <script src="bootstrap/js/bootstrap.min.js"></script>
-    <script src="js/custom.js"></script>-->
-    
+      <script src="bootstrap/js/bootstrap.min.js"></script>
+      <script src="js/custom.js"></script>-->
   </body>
 </html>

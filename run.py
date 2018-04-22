@@ -85,8 +85,6 @@ def searchItems(jsdata):
 	studentData = firebase1.get('', None)
 	firebase2 = firebase.FirebaseApplication('https://inf551usc-61ddc.firebaseio.com/', None)
 	courseData = firebase2.get('', None)
-	subQueries=json.loads(jsdata)['query'].split()[1:]
-
 	returnList=courseData
 	for oneCourse in returnList:
 		will=[]
@@ -165,7 +163,7 @@ def willAdd():
 	instructors=request.form['courseInf'].split('_')[2]
 	my=request.form['my']
 	firebase1 = firebase.FirebaseApplication('https://inf551uscstudent.firebaseio.com/', None)
-	wills=firebase1.get(my,'will');
+	wills=firebase1.get(my,'will')
 	exist=False
 	if wills!=None:
 		for i in wills.keys():
@@ -177,22 +175,66 @@ def willAdd():
 		return 'success'
 	return "fail"
 
-@app.route('/willAdd1', methods = ['POST'])
-def willAdd1():
+@app.route('/willDel', methods = ['POST'])
+def willDel():
 	courseID=request.form['courseInf'].split('_')[1]
 	instructors=request.form['courseInf'].split('_')[2]
 	my=request.form['my']
 	firebase1 = firebase.FirebaseApplication('https://inf551uscstudent.firebaseio.com/', None)
-	wills=firebase1.get(my,'will');
-	exist=False
-	if wills!=None:
-		for i in wills.keys():
-			if wills[i]['courseID']==courseID and wills[i]['instructors']==instructors:
-				exist=True
-				break
-	if exist==False:
-		firebase1.post(my+'/will', {'courseID':courseID,'instructors':instructors})
-		return 'success'
+	wills=firebase1.get(my,'will')
+	for i in wills.keys():
+		if wills[i]['courseID']==courseID and wills[i]['instructors']==instructors:
+			students=firebase1.get(my,'student');
+			for j in students.keys():
+				if students[j]['courseID']==courseID and students[j]['instructors']==instructors:
+					tutor=students[j]['email'].split('@')[0]
+					tutors=firebase1.get(tutor,'/tutor')
+					for k in tutors.keys():
+						if tutors[k]['courseID']==courseID and tutors[k]['instructors']==instructors and tutors[k]['email']==my+'@usc.edu':
+							firebase1.delete(tutor+'/tutor',k)
+							break
+					firebase1.delete(my+'/student',j)
+			firebase1.delete(my+'/will',i)
+			return "success"
+	return "fail"
+
+@app.route('/tutorDel', methods = ['POST'])
+def tutorDel():
+	courseID=request.form['courseInf'].split('_')[1]
+	instructors=request.form['courseInf'].split('_')[2]
+	tutorEmail=request.form['tutorEmail']
+	my=request.form['my']
+	firebase1 = firebase.FirebaseApplication('https://inf551uscstudent.firebaseio.com/', None)
+	tutors=firebase1.get(my,'tutor')
+	for i in tutors.keys():
+		if tutors[i]['courseID']==courseID and tutors[i]['instructors']==instructors and tutors[i]['email']==tutorEmail:
+			tutor=tutorEmail.split('@')[0]
+			students=firebase1.get(tutor,'student')
+			for j in students.keys():
+				if students[j]['courseID']==courseID and students[j]['instructors']==courseID and students[j]['email']==my+"@usc.edu":
+					firebase1.delete(tutor+'/student',j)
+					break
+			firebase1.delete(my+'/tutor',i)
+			return "success"
+	return "fail"
+@app.route('/stuDel', methods = ['POST'])
+def stuDel():
+	courseID=request.form['courseInf'].split('_')[1]
+	instructors=request.form['courseInf'].split('_')[2]
+	stuEmail=request.form['stuEmail']
+	my=request.form['my']
+	firebase1 = firebase.FirebaseApplication('https://inf551uscstudent.firebaseio.com/', None)
+	stus=firebase1.get(my,'student')
+	for i in stus.keys():
+		if stus[i]['courseID']==courseID and stus[i]['instructors']==instructors and stus[i]['email']==stuEmail:
+			stu=stuEmail.split('@')[0]
+			tutors=firebase1.get(stu,'tutor')
+			for j in tutors.keys():
+				if tutors[j]['courseID']==courseID and tutors[j]['instructors']==courseID and tutors[j]['email']==my+"@usc.edu":
+					firebase1.delete(stu+'/tutor',j)
+					break
+			firebase1.delete(my+'/student',i)
+			return "success"
 	return "fail"
 
 @app.route('/upHist', methods = ['POST'])

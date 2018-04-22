@@ -104,27 +104,22 @@ def fetchProfile(jsdata):
 	returnList={}
 	firebase1 = firebase.FirebaseApplication('https://inf551uscstudent.firebaseio.com/', None)
 	studentData = firebase1.get(my, None)
+	di=["History",'student',"tutor","will"]
+	li=['firstName','lastName','status','phone']
 	for i in studentData.keys():
-		if i=="History":
-			History=[]
+		if i in di:
+			temp=[]
 			for j in studentData[i].keys():
-				History.append(studentData[i][j])
-			returnList['History']=History
-		if i=="student":
-			Student=[]
-	'''
-	returnList=courseData
-	for oneCourse in returnList:
-		will=[]
-		for oneStudent in studentData.keys():
-			if studentData[oneStudent].has_key('will'):
-				for aCourse in studentData[oneStudent]['will'].keys():
-					if studentData[oneStudent]['will'][aCourse]['courseID']==oneCourse['courseID'] and studentData[oneStudent]['will'][aCourse]['instructors']==oneCourse['courseInstructors']:
-						will.append(studentData[oneStudent]['email'])
-		oneCourse['willToTutor']=will
-		'''
-	return "ss"
+				temp.append(studentData[i][j])
+			returnList[i]=temp
+		elif i in li:
+			returnList[i]=studentData[i]
+		else: continue
+	for i in li:
+		if returnList.has_key(i)==False:
+			returnList[i]=None
 	return jsonify(returnList)
+
 
 @app.route('/restPWD', methods = ['POST'])
 def restPWD():
@@ -181,6 +176,25 @@ def willAdd():
 		firebase1.post(my+'/will', {'courseID':courseID,'instructors':instructors})
 		return 'success'
 	return "fail"
+
+@app.route('/willAdd1', methods = ['POST'])
+def willAdd1():
+	courseID=request.form['courseInf'].split('_')[1]
+	instructors=request.form['courseInf'].split('_')[2]
+	my=request.form['my']
+	firebase1 = firebase.FirebaseApplication('https://inf551uscstudent.firebaseio.com/', None)
+	wills=firebase1.get(my,'will');
+	exist=False
+	if wills!=None:
+		for i in wills.keys():
+			if wills[i]['courseID']==courseID and wills[i]['instructors']==instructors:
+				exist=True
+				break
+	if exist==False:
+		firebase1.post(my+'/will', {'courseID':courseID,'instructors':instructors})
+		return 'success'
+	return "fail"
+
 @app.route('/upHist', methods = ['POST'])
 def upHist():
 	if request.form['upHist']!="":

@@ -58,192 +58,193 @@
 
 
 <script>
-                  $.ajax({
-                    type: "GET",
-                    url: "/fetchProfile/{\"query\":\"{{session.username}}\"}",
-                    contentType: "application/json; charset=utf-8",
-                    dataType: 'json',
-                    //success: function(data) {
-                    //    disp1(data);
-                    //}
-                });
+var allData;
+$.ajax({
+    type: "GET",
+    url: "/fetchProfile/{\"query\":\"{{session.username}}\"}",
+    contentType: "application/json; charset=utf-8",
+    dataType: 'json',
+    success: function(data) {
+        console.log(data);
+        allData = data;
+    }
+});
 
-	var u;
-	var c;
-	var e;
-	var p;
+var u;
+var c;
+var e;
+var p;
 
-		 $.fn.inputbox = function(){
-    		this.each(function(){
-          	if (!($(this).find('input').length)){
-            	//if input not exist
-                var i  = $(this)[0].id
-              	var t = $(this).text();
-              	//change to inputbox
-                //$(this).html("<input type=text"+" id="+i+" value=\""+t+"\">");
-                if((this.id)=='user_name'){
-  					$(this).html("<input type=text"+" id="+i+" value=\""+t+"\" placeholder=\"username\">");
-  				}
-  				if((this.id)=='contact_name'){
-  					$(this).html("<input type=text"+" id="+i+" value=\""+t+"\" placeholder=\"contact name\">");
-  				}
-  				if((this.id)=='email'){
-  					$(this).html("<input type=text"+" id="+i+" value=\""+t+"\" pattern=\".+@usc.edu\" required title=\"123@usc.edu\" placeholder=\"123@usc.edu\">");
-  				}
-  				if((this.id)=='phone'){
-  					$(this).html("<input type=tel"+" id="+i+" value=\""+t+"\" placeholder=\"(555)555-5555\">");
-  				}
-                
-    		}
-    		});    
-		};
-
-		  	$(document).on('click','#edit',function() {
-				var sub= $('<button type="button" class="btn btn-primary" id="btn">submit</button>');
-				var cancel=$('<button type="button" class="btn btn-primary" id="cancel" style="margin-left:10px;">cancel</button>');
-				
-				//append button
-  				if($("#first").find("#btn").length == 0) {
-
-   					$('#add_button').append(sub);
-   					$('#add_button').append(cancel);
-  				
-   				//change to inputbox
-  				$("#first").find('p').inputbox(); 
-  				$("#first").find('input').each(function(){
-  		
-  					if((this.id)=='user_name'){
-  						u=$(this).val();
-  					}
-  					if((this.id)=='contact_name'){
-  						c=$(this).val();
-  					}
-  					if((this.id)=='email'){
-  						e=$(this).val();
-  					}
-  					if((this.id)=='phone'){
-  						p=$(this).val();
-  					}
-              	});
-            }else {
-              		//if button existed
-            	alert("please click on either submit or cancel")
+$.fn.inputbox = function() {
+    this.each(function() {
+        if (!($(this).find('input').length)) {
+            //if input not exist
+            var i = $(this)[0].id
+            var t = $(this).text();
+            //change to inputbox
+            //$(this).html("<input type=text"+" id="+i+" value=\""+t+"\">");
+            if ((this.id) == 'user_name') {
+                $(this).html("<input type=text" + " id=" + i + " value=\"" + t + "\" placeholder=\"username\">");
             }
-  				
-			});
-		  	//submit button
-			$(document).on('click','#btn',function(){
-        		$("#first").find('input').each(function(){
-        			var i  = $(this)[0].id
-              var t = $(this).val();
-              var isMatch;
-
-  					  if($(this)[0].id=="email"){
-  							//check email
-                isMatch = /^[a-zA-Z0-9._-]+@usc.edu$/.test(t);
-  						 	if (isMatch){
-                  //if has alert, remove and change to p
-                  if($("#result").find("#danger1").length != 0){
-                      $('#danger1').empty();
-                      $('#danger1').remove();
-                      $('#'+i).html("<p id="+i+">"+t+"</p>");
-                     }else{
-                      //if not, change to p
-                      $('#'+i).html("<p id="+i+">"+t+"</p>");
-                    }
-  						 	}else{
-  						 		//wrong append
-                  //if wrong, but no warn yet, append
-                  if($("#result").find("#danger1").length==0){
-                    var sub= $('<div id="danger1" class="alert alert-danger"><strong>Wrong Email Format</strong></div>');
-  						 		 $('#result').append(sub);
-                  }
-  						 	}
-  					}
-  						
-            if($(this)[0].id=="phone"){
-              	 //check phone
-  							 isMatch = /^[0-9]{10}$/.test(t);
-                 if(isMatch){
-                    if($("#result").find("#danger2").length != 0){
-                      $('#danger2').remove();
-                      $('#'+i).html("<p id="+i+">"+t+"</p>");
-                     }else{
-                      $('#'+i).html("<p id="+i+">"+t+"</p>");
-                    }
-  					     }else{
-              	   //wrong append
-                   if($("#result").find("#danger2").length == 0){
-                      var sub= $('<div id="danger2" class="alert alert-danger"><strong>Wrong Phone Format</strong></div>');
-  						 		     $('#result').append(sub);
-                    }
-              	}
-              }
-
-            if($(this)[0].id=="user_name"){
-              $('#'+i).html("<p id="+i+">"+t+"</p>");
+            if ((this.id) == 'contact_name') {
+                $(this).html("<input type=text" + " id=" + i + " value=\"" + t + "\" placeholder=\"contact name\">");
             }
-            if($(this)[0].id=="contact_name"){
-              $('#'+i).html("<p id="+i+">"+t+"</p>");
-            }  
+            if ((this.id) == 'email') {
+                $(this).html("<input type=text" + " id=" + i + " value=\"" + t + "\" pattern=\".+@usc.edu\" required title=\"123@usc.edu\" placeholder=\"123@usc.edu\">");
+            }
+            if ((this.id) == 'phone') {
+                $(this).html("<input type=tel" + " id=" + i + " value=\"" + t + "\" placeholder=\"(555)555-5555\">");
+            }
 
-         });
-          //alert(check);
-					if($("#result").has("div").length == 0){
-              if($("#first").find("#btn").length != 0){
-                  $('#btn').remove();
-                  $('#cancel').remove();
-                  var sub= $('<div id="success" class="alert alert-success"><strong>Success!</strong></div>');
-                  $('#result').append(sub);
-                  setTimeout(function(){
-                    if ($('#success').length > 0) {
+        }
+    });
+};
+
+$(document).on('click', '#edit', function() {
+    var sub = $('<button type="button" class="btn btn-primary" id="btn">submit</button>');
+    var cancel = $('<button type="button" class="btn btn-primary" id="cancel" style="margin-left:10px;">cancel</button>');
+
+    //append button
+    if ($("#first").find("#btn").length == 0) {
+
+        $('#add_button').append(sub);
+        $('#add_button').append(cancel);
+
+        //change to inputbox
+        $("#first").find('p').inputbox();
+        $("#first").find('input').each(function() {
+
+            if ((this.id) == 'user_name') {
+                u = $(this).val();
+            }
+            if ((this.id) == 'contact_name') {
+                c = $(this).val();
+            }
+            if ((this.id) == 'email') {
+                e = $(this).val();
+            }
+            if ((this.id) == 'phone') {
+                p = $(this).val();
+            }
+        });
+    } else {
+        //if button existed
+        alert("please click on either submit or cancel")
+    }
+
+});
+//submit button
+$(document).on('click', '#btn', function() {
+    $("#first").find('input').each(function() {
+        var i = $(this)[0].id
+        var t = $(this).val();
+        var isMatch;
+
+        if ($(this)[0].id == "email") {
+            //check email
+            isMatch = /^[a-zA-Z0-9._-]+@usc.edu$/.test(t);
+            if (isMatch) {
+                //if has alert, remove and change to p
+                if ($("#result").find("#danger1").length != 0) {
+                    $('#danger1').empty();
+                    $('#danger1').remove();
+                    $('#' + i).html("<p id=" + i + ">" + t + "</p>");
+                } else {
+                    //if not, change to p
+                    $('#' + i).html("<p id=" + i + ">" + t + "</p>");
+                }
+            } else {
+                //wrong append
+                //if wrong, but no warn yet, append
+                if ($("#result").find("#danger1").length == 0) {
+                    var sub = $('<div id="danger1" class="alert alert-danger"><strong>Wrong Email Format</strong></div>');
+                    $('#result').append(sub);
+                }
+            }
+        }
+
+        if ($(this)[0].id == "phone") {
+            //check phone
+            isMatch = /^[0-9]{10}$/.test(t);
+            if (isMatch) {
+                if ($("#result").find("#danger2").length != 0) {
+                    $('#danger2').remove();
+                    $('#' + i).html("<p id=" + i + ">" + t + "</p>");
+                } else {
+                    $('#' + i).html("<p id=" + i + ">" + t + "</p>");
+                }
+            } else {
+                //wrong append
+                if ($("#result").find("#danger2").length == 0) {
+                    var sub = $('<div id="danger2" class="alert alert-danger"><strong>Wrong Phone Format</strong></div>');
+                    $('#result').append(sub);
+                }
+            }
+        }
+
+        if ($(this)[0].id == "user_name") {
+            $('#' + i).html("<p id=" + i + ">" + t + "</p>");
+        }
+        if ($(this)[0].id == "contact_name") {
+            $('#' + i).html("<p id=" + i + ">" + t + "</p>");
+        }
+
+    });
+    //alert(check);
+    if ($("#result").has("div").length == 0) {
+        if ($("#first").find("#btn").length != 0) {
+            $('#btn').remove();
+            $('#cancel').remove();
+            var sub = $('<div id="success" class="alert alert-success"><strong>Success!</strong></div>');
+            $('#result').append(sub);
+            setTimeout(function() {
+                if ($('#success').length > 0) {
                     $('#success').remove();
-                    }
-                  }, 1000)
-              }
-          }  
+                }
+            }, 1000)
+        }
+    }
 
-            
-      });	
-			//cancel button 
 
-			$(document).on('click','#cancel',function(){
-        		$("#first").find('input').each(function(){
-        			var i  = $(this)[0].id
-              		//var t = $(this).val();
-              		//$('#'+i).html("<p id="+i+">"+t+"</p>");
-          			
-            if($(this)[0].id=="user_name"){
-  						
-  						$('#'+i).html("<p id="+i+">"+u+"</p>");
-  					}
-  					if($(this)[0].id=="contact_name"){
-  						
-  						$('#'+i).html("<p id="+i+">"+c+"</p>");
-  					}
-  					if($(this)[0].id=="email"){
-  						
-  						$('#'+i).html("<p id="+i+">"+e+"</p>");
-  					}
-  					if($(this)[0].id=="phone"){
-  						
-  						$('#'+i).html("<p id="+i+">"+p+"</p>");
-  					}
-            
-            if($( "#result" ).has( "div" ).length>0){
-              //alert("inside"+check);
-              $( "#result" ).empty();
-            }
-          	   if($("#first").find("#btn").length != 0){
-          	  			$('#btn').remove();
-          	  			$('#cancel').remove();
-          	  		}
-                
-          
-				});
-    				
-			});
+});
+//cancel button 
 
+$(document).on('click', '#cancel', function() {
+    $("#first").find('input').each(function() {
+        var i = $(this)[0].id
+        //var t = $(this).val();
+        //$('#'+i).html("<p id="+i+">"+t+"</p>");
+
+        if ($(this)[0].id == "user_name") {
+
+            $('#' + i).html("<p id=" + i + ">" + u + "</p>");
+        }
+        if ($(this)[0].id == "contact_name") {
+
+            $('#' + i).html("<p id=" + i + ">" + c + "</p>");
+        }
+        if ($(this)[0].id == "email") {
+
+            $('#' + i).html("<p id=" + i + ">" + e + "</p>");
+        }
+        if ($(this)[0].id == "phone") {
+
+            $('#' + i).html("<p id=" + i + ">" + p + "</p>");
+        }
+
+        if ($("#result").has("div").length > 0) {
+            //alert("inside"+check);
+            $("#result").empty();
+        }
+        if ($("#first").find("#btn").length != 0) {
+            $('#btn').remove();
+            $('#cancel').remove();
+        }
+
+
+    });
+
+});
 </script>
 
 
@@ -306,74 +307,77 @@
 			  			</div>
 		  		</div>
 		  	</div>
+
+ 
 <script>
- $(document).on('click','#tutor',function(){
-            $("#tutor_content").find('input').each(function(){
 
-                var input_val = $(this).val();
-                $(this).attr("id",input_val);
-                var icon = '<span id='+input_val+' class="btn-sm btn-danger remove-me field-input">x</span>'
-                 $(this).after(icon);
-                       });
-          });
-                  
- $(document).on('click','#student',function(){
-            $("#student_content").find('input').each(function(){
-                var input_val = $(this).val();
-                $(this).attr("id",input_val);
-                var icon = '<span id='+input_val+' class="btn-sm btn-danger remove-me field-input">x</span>'
-                 $(this).after(icon);
-            });
+
+$(document).on('click','#tutor_edit',function(){
+  if($("#tutor_table").find('tbody').find('tr').find('b').length == 0){
+     $("#tutor_table").find('tr').each(function(){
+          if(this.id != "head"){
+            $(this).append('<td><b id='+this.id +' class="btn-sm btn-danger remove-me field-input">x</b></td>');
+          }
       });
+   }else{
+         //var s = $("#tutor_table").find('tbody').find('tr').find('b').length;
+          $('b').closest('td').html('');
+    
+    
+   }
+});
 
 
 
- $('#tutor_content').find('span').on('click',function(){
+      $("#tutor_table").find('b').each(function(){
+             $(this).on('click',function(){
+
+      });
         
-              var i  = this.id;
-              alert(i);
-      // $("#student_content").find('span').each(function(){
-      //        alert(i);
-              //$('#'+i).remove();
-      //      });
-  });      
-     
+   
+  });
+
+    
 
 </script>
 
-
-		  		<div class="col-md-10">
-		  			<div class="row">
+          <div class="col-md-10">
+            <div class="row">
                   <div class="content-box-large">
           <div class="panel-heading">
           <div class="panel-title">Your Tutor</div>
+           <div style="float: right;">
+              <a href='#'><i id="tutor_edit" class="glyphicon glyphicon-cog"></i></a>
+            </div>
         </div>
           <div class="panel-body">
             <div class="table-responsive">
-              <table class="table">
+              <table class="table" id="tutor_table">
                     <thead>
-                      <tr>
+                      <tr id="head">
                         <th>#</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Username</th>
+                        <th>Course ID</th>
+                        <th>Instructors</th>
+                        <th>Email</th>
+                       
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>1</td>
+                      <tr id="1">
+                        <td>></td>
                         <td>Mark</td>
                         <td>Otto</td>
                         <td>@mdo</td>
+                        
                       </tr>
-                      <tr>
-                        <td>2</td>
+                      <tr id='2'>
+                        <td>></td>
                         <td>Jacob</td>
                         <td>Thornton</td>
                         <td>@fat</td>
                       </tr>
-                      <tr>
-                        <td>3</td>
+                      <tr id='3'>
+                        <td>></td>
                         <td>Larry</td>
                         <td>the Bird</td>
                         <td>@twitter</td>
@@ -386,16 +390,19 @@
           <div class="content-box-large">
           <div class="panel-heading">
           <div class="panel-title">Your Student</div>
+           <div style="float: right;">
+              <a href='#'><i id="student_edit" class="glyphicon glyphicon-cog"></i></a>
+            </div>
         </div>
           <div class="panel-body">
             <div class="table-responsive">
               <table class="table">
                     <thead>
-                      <tr>
+                      <tr >
                         <th>#</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Username</th>
+                        <th>Course ID</th>
+                        <th>Instructor</th>
+                        <th>Email</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -404,6 +411,7 @@
                         <td>Mark</td>
                         <td>Otto</td>
                         <td>@mdo</td>
+                        <td><span id='+input_val+' class="btn-sm btn-danger remove-me field-input">x</span></td>
                       </tr>
                       <tr>
                         <td>2</td>
@@ -426,6 +434,9 @@
         <div class="content-box-large">
           <div class="panel-heading">
           <div class="panel-title">Your Will</div>
+           <div style="float: right;">
+              <a href='#'><i id="will_edit" class="glyphicon glyphicon-cog"></i></a>
+            </div>
         </div>
           <div class="panel-body">
             <div class="table-responsive">
@@ -433,9 +444,9 @@
                     <thead>
                       <tr>
                         <th>#</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Username</th>
+                        <th>Course ID</th>
+                        <th>Instructor</th>
+                        
                       </tr>
                     </thead>
                     <tbody>
@@ -462,12 +473,12 @@
             </div>
           </div>
         </div>
-		  	</div>
-		  </div>
+        </div>
+      </div>
 
-	<!-- row-->
-	</div>
-	<!-- page content-->
+  <!-- row-->
+  </div>
+  <!-- page content-->
   </div>
 <script>
   $(document).on('click','#history',function(){

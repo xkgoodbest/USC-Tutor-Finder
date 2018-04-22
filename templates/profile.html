@@ -333,7 +333,7 @@
 
          }else{
                //var s = $("#tutor_table").find('tbody').find('tr').find('b').length;
-                $('b').closest('td').html('');
+                $("#tutor_table").find('tbody').find('tr').find('b').closest('td').html('');
          }
       });
       
@@ -370,6 +370,130 @@
             //backend...........
 
           });
+
+       //your student table construct....
+      length = data.student.length;
+      console.log(length);
+      for (p = 0; p < length; p++) {
+      
+      courseID = data.student[p].courseID;
+      instructor = data.student[p].instructors;
+      email = data.student[p].email;
+      sub_id = email.substr(0, email.indexOf('@')); 
+      //console.log(sub_id);
+      tr_id = courseID+instructor+sub_id;
+      tr_id=tr_id.replace(/ /g,'');
+      tr_id=tr_id.replace(/-/g,'');
+      tr_id=tr_id.replace(/,/g,'');
+      //tr_id=tr_id.replace(/\.@/g,'');
+      //tr_id=tr_id.repalce('.', '');
+      //console.log(tr_id);
+      $('#student_table').find('#body').append($('<tr id='+tr_id+'>'));
+      $('#student_table #body').find('#'+tr_id).append('<td>></td>');
+      $('#student_table').find('#body').find('#'+tr_id).append('<td>'+courseID+'</td>');
+      $('#student_table').find('#body').find("#"+tr_id).append('<td>'+instructor+'</td>');
+      $('#student_table').find('#body').find("#"+tr_id).append('<td>'+email+'</td>');
+      }
+
+      
+      $(document).on('click','#student_edit',function(){
+        if($("#student_table").find('tbody').find('tr').find('b').length == 0){
+           $("#student_table").find('tr').each(function(){
+                if(this.id != "head"){
+                  $(this).append('<td id='+this.id+'><b class="btn-sm btn-danger remove-me field-input">x</b></td>');
+                }
+            });
+        $("#student_table").find('tbody').find('tr').find('b').each(function(){
+            $(this).on('click',function(){
+                
+                remove_id = $(this).closest('td').attr('id');
+                //backend.......
+                cid = $("#student_table #body tr#"+remove_id+" td:nth-child(2)").text();
+                instruct = $("#student_table #body tr#"+remove_id+" td:nth-child(3)").text();
+                emailAddr = $("#student_table #body tr#"+remove_id+" td:nth-child(4)").text();
+
+                $.post("/stuDel", {"courseID": cid,"instructors":instruct,"stuEmail":emailAddr,"my":"{{session.username}}"},function(data)
+                    {
+                        if (data=="fail"){
+                          alert("Delete failed");
+                        }
+                        else{
+                          $('#student_table #body tr#'+remove_id).remove();
+                          alert("Deleted");
+                        }
+                    });
+            });
+         
+         });
+
+         }else{
+               //var s = $("#tutor_table").find('tbody').find('tr').find('b').length;
+                $("#student_table").find('tbody').find('tr').find('b').closest('td').html('');
+         }
+      });
+
+       //your will table construct....
+      length = data.will.length;
+      console.log(length);
+      for (p = 0; p < length; p++) {
+      
+      courseID = data.will[p].courseID;
+      instructor = data.will[p].instructors;
+      //email = data.will[p].email;
+      //sub_id = email.substr(0, email.indexOf('@')); 
+      //console.log(sub_id);
+      tr_id = courseID+instructor;
+      tr_id=tr_id.replace(/ /g,'');
+      tr_id=tr_id.replace(/-/g,'');
+      tr_id=tr_id.replace(/,/g,'');
+      //tr_id=tr_id.replace(/\.@/g,'');
+      //tr_id=tr_id.repalce('.', '');
+      //console.log(tr_id);
+      $('#will_table').find('#body').append($('<tr id='+tr_id+'>'));
+      $('#will_table #body').find('#'+tr_id).append('<td>></td>');
+      $('#will_table').find('#body').find('#'+tr_id).append('<td>'+courseID+'</td>');
+      $('#will_table').find('#body').find("#"+tr_id).append('<td>'+instructor+'</td>');
+      //$('#will_table').find('#body').find("#"+tr_id).append('<td>'+email+'</td>');
+      }
+
+      
+      $(document).on('click','#will_edit',function(){
+        if($("#will_table").find('tbody').find('tr').find('b').length == 0){
+           $("#will_table").find('tr').each(function(){
+                if(this.id != "head"){
+                  $(this).append('<td id='+this.id+'><b class="btn-sm btn-danger remove-me field-input">x</b></td>');
+                }
+            });
+        $("#will_table").find('tbody').find('tr').find('b').each(function(){
+            $(this).on('click',function(){
+                
+                remove_id = $(this).closest('td').attr('id');
+                //backend.......
+                cid = $("#will_table #body tr#"+remove_id+" td:nth-child(2)").text();
+                instruct = $("#will_table #body tr#"+remove_id+" td:nth-child(3)").text();
+                //emailAddr = $("#will_table #body tr#"+remove_id+" td:nth-child(4)").text();
+                $.post("/willDel", {"courseID": cid,"instructors":instruct,"my":"{{session.username}}"},function(data)
+                    {
+                        if (data=="fail"){
+                          alert("Delete failed");
+                        }
+                        else{
+                          $('#will_table #body tr#'+remove_id).remove();
+                          alert("Deleted");
+                        }
+                    });
+            });
+         
+         });
+
+         }else{
+               //var s = $("#tutor_table").find('tbody').find('tr').find('b').length;
+                $("#will_table").find('tbody').find('tr').find('b').closest('td').html('');
+         }
+      });
+
+
+
 
       
       }
@@ -489,16 +613,16 @@
               </div>
               <div class="panel-body">
                 <div class="table-responsive">
-                  <table class="table">
+                  <table class="table" id="student_table">
                     <thead>
-                      <tr >
+                      <tr id='head'>
                         <th>#</th>
                         <th>Course ID</th>
                         <th>Instructor</th>
                         <th>Email</th>
                       </tr>
                     </thead>
-                    <tbody>
+                    <tbody id='body'>
                     
                     </tbody>
                   </table>
@@ -510,23 +634,22 @@
                 <div class="panel-title">Your Will</div>
                 <div style="float: right;">
                   <button type="button" class="btn btn-default btn-sm">
-                    <i class="glyphicon glyphicon-cog" ></i>
+                    <i class="glyphicon glyphicon-cog" id ="will_edit"></i>
                     <!--<a href='#'><i id="tutor_edit" class="glyphicon glyphicon-cog"></i></a>-->
                   </button>
                 </div>
               </div>
               <div class="panel-body">
                 <div class="table-responsive">
-                  <table class="table">
+                  <table class="table" id="will_table">
                     <thead>
-                      <tr>
+                      <tr id="head">
                         <th>#</th>
                         <th>Course ID</th>
                         <th>Instructor</th>
                       </tr>
                     </thead>
-                    <tbody>
-                      
+                    <tbody id='body'>
                       
                     </tbody>
                   </table>
@@ -553,15 +676,14 @@
     </script>
   </br>
 </br>
-    <footer style="position:fixed; bottom:0;height:40px;width: 100%;">
-      <div class="text-center">
-        Copyright 2018 <a href="/">USC Tutor Finder</a>
-      </div>
-    </footer>
+   
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) 
       <script src="https://code.jquery.com/jquery.js"></script>-->
     <!-- Include all compiled plugins (below), or include individual files as needed 
       <script src="bootstrap/js/bootstrap.min.js"></script>
-      <script src="js/custom.js"></script>-->
+      <script src="js/custom.js"></script>
+
+    -->
   </body>
+
 </html>

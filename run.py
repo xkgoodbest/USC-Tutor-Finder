@@ -177,8 +177,8 @@ def willAdd():
 
 @app.route('/willDel', methods = ['POST'])
 def willDel():
-	courseID=request.form['courseInf'].split('_')[1]
-	instructors=request.form['courseInf'].split('_')[2]
+	courseID=request.form['courseID']
+	instructors=request.form['instructors']
 	my=request.form['my']
 	firebase1 = firebase.FirebaseApplication('https://inf551uscstudent.firebaseio.com/', None)
 	wills=firebase1.get(my,'will')
@@ -219,10 +219,11 @@ def tutorDel():
 	return "fail"
 @app.route('/stuDel', methods = ['POST'])
 def stuDel():
-	courseID=request.form['courseInf'].split('_')[1]
-	instructors=request.form['courseInf'].split('_')[2]
+	courseID=request.form['courseID']
+	instructors=request.form['instructors']
 	stuEmail=request.form['stuEmail']
 	my=request.form['my']
+	print my
 	firebase1 = firebase.FirebaseApplication('https://inf551uscstudent.firebaseio.com/', None)
 	stus=firebase1.get(my,'student')
 	for i in stus.keys():

@@ -97,6 +97,35 @@ def searchItems(jsdata):
 						will.append(studentData[oneStudent]['email'])
 		oneCourse['willToTutor']=will
 	return jsonify(returnList)
+
+@app.route('/fetchProfile/<jsdata>', methods = ['GET'])
+def fetchProfile(jsdata):
+	my=json.loads(jsdata)['query']
+	returnList={}
+	firebase1 = firebase.FirebaseApplication('https://inf551uscstudent.firebaseio.com/', None)
+	studentData = firebase1.get(my, None)
+	for i in studentData.keys():
+		if i=="History":
+			History=[]
+			for j in studentData[i].keys():
+				History.append(studentData[i][j])
+			returnList['History']=History
+		if i=="student":
+			Student=[]
+	'''
+	returnList=courseData
+	for oneCourse in returnList:
+		will=[]
+		for oneStudent in studentData.keys():
+			if studentData[oneStudent].has_key('will'):
+				for aCourse in studentData[oneStudent]['will'].keys():
+					if studentData[oneStudent]['will'][aCourse]['courseID']==oneCourse['courseID'] and studentData[oneStudent]['will'][aCourse]['instructors']==oneCourse['courseInstructors']:
+						will.append(studentData[oneStudent]['email'])
+		oneCourse['willToTutor']=will
+		'''
+	return "ss"
+	return jsonify(returnList)
+
 @app.route('/restPWD', methods = ['POST'])
 def restPWD():
 	oldPWD=request.form['oldPWD'];
@@ -158,6 +187,7 @@ def upHist():
 		firebase1 = firebase.FirebaseApplication('https://inf551uscstudent.firebaseio.com/', None)
 		firebase1.post(request.form['user']+'/History', request.form['upHist'])
 	return "received"
+
 class ProfileEdit(Form):
 	email = StringField("Email", [validators.Length(min = 1, max = 50)])
 	name  = StringField("Full Name", [validators.Length(min = 1, max = 30)])
@@ -185,7 +215,6 @@ def redToProfile():
 			putData = {}
 		return render_template('profile.html')
 	return render_template('profile.html', form=form)
-	
 @app.route('/reset_pwd')
 def rest_pass():
 	return render_template('reset_pwd.html')

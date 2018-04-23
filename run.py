@@ -67,7 +67,7 @@ def signin():
 @app.route('/signout')
 def signout():
 	session.clear()
-	return redirect(url_for('redToIn'))
+	return redirect(url_for('output'))
 
 @app.route('/signup')
 def redToUp():
@@ -116,6 +116,10 @@ def fetchProfile(jsdata):
 	for i in li:
 		if returnList.has_key(i)==False:
 			returnList[i]=None
+	#for i in di:
+	#	if returnList.has_key(i)==False:
+	#		returnList[i]="n"
+
 	return jsonify(returnList)
 
 

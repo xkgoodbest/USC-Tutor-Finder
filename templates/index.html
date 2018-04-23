@@ -11,23 +11,104 @@
     <!-- Bootstrap core CSS 
     <link href="{{url_for('static',filename='styles/bootstrap-4.0.0/dist/css/bootstrap.min.css')}}" rel="stylesheet">-->
      <link href="{{url_for('static',filename='styles/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
-    
-     
      <link href="{{url_for('static',filename='styles/css/styles.css')}}" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
 
     <!-- Custom styles for this template 
     <link href="{{url_for('static',filename='styles/signin.css')}}" rel="stylesheet">
     <link href="{{url_for('static',filename='styles/index.css')}}" rel="stylesheet">
   -->
     <title>USC Tutor Finder</title>
-  </head>
+
+
+
+    <header class="site-header">
+
+  <!-- Top navbar & branding -->
+  <nav class="navbar  navbar-light" style="background:transparent;">
+    <div class="container">
+
+      <!-- Toggle buttons and brand -->
+      <div class="navbar-header navbar-light" style="background:transparent;" >
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar" aria-expanded="true" aria-controls="navbar">
+          <span class="glyphicon glyphicon-option-vertical"></span>
+        </button>
+
+        <button type="button" class="navbar-toggle for-sidebar" data-toggle="offcanvas">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+
+      </div>
+      <!-- END Toggle buttons and brand -->
+
+      <!-- Top navbar -->
+      <div id="navbar" class="navbar-collapse collapse" aria-expanded="true" role="banner">
+        <ul class="nav navbar-nav navbar-left" style="float: right;">
+          <li id="search">
+            <a href="#">Search</a>
+          </li>
+          <li id="profile">
+            <a href="#">Profile</a>
+          </li>
+          <li id="signout">
+            <a href="signout">SignOut</a>
+          </li>
+        </ul>
+      </div>
+      <!-- END Top navbar -->
+    </div>
+  </nav>
+  <!-- END Top navbar & branding -->
+  <p hidden id="username">{{session.username}}</p>
+  </header>
+</head>
+  
+  <script>
+  var user = $('#username').text();
+  console.log(user);
+  $(document).on('click', '#search', function() {
+      if(user != ''){
+        window.location.href = "search";
+      }else{
+        alert("please sign in");
+      }
+  });
+
+  $(document).on('click', '#profile', function() {
+      if(user != ''){
+        window.location.href = "profile";
+      }else{
+        alert("please sign in");
+      }
+  });
+
+  $(document).on('click', '#signin', function() {
+      if(user == ''){
+        window.location.href = "signin";
+      }else{
+        alert("You have already signed in.");
+      }
+  });
+
+    $(document).on('click', '#signup', function() {
+      if(user == ''){
+        window.location.href = "signup";
+      }else{
+        alert("Please signout to signup.");
+      }
+  });
+
+</script>
 <body style="width:100%;background:url('static/homepage.jpg');background-size: cover;">
 
 <body class="text-center">
+
+<!--
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
-<!--
-
 <nav class="navbar navbar-default">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -61,8 +142,8 @@
               <form class="form-signin">
                 <br/>
                <h6>USC Tutor Finder</h6>
-                 <a href='signin' class="btn btn-lg btn-primary btn-block btn-outline-secondary">Sign In</a>
-                <a href='signup' class="btn btn-lg btn-primary btn-block btn-outline-secondary">Sign Up</a>
+                 <a href='#' class="btn btn-lg btn-primary btn-block btn-outline-secondary" id="signin">Sign In</a>
+                <a href='#' class="btn btn-lg btn-primary btn-block btn-outline-secondary" id="signup">Sign Up</a>
               </form>
             </div>
           </div>
@@ -72,13 +153,14 @@
   </div>
 </div>
 
-
+<!--
 <footer style="position:fixed; bottom:0;height:40px;width: 100%;">
             <div class="text-center">
                Copyright 2018  
                <a href='index.html'>USC Tutor Finder</a>
             </div>
 </footer>
+-->
 </body>
 
 </body>

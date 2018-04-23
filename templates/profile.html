@@ -289,7 +289,12 @@
       });
       
       //your tutor table construct....
-      var length = data.tutor.length;
+      var length;
+      if(data.tutor==undefined){
+        length = 0;
+      }else{
+        length = data.tutor.length;
+      }
       //console.log(length);
       var p;
       for (p = 0; p < length; p++) {
@@ -361,9 +366,13 @@
       });
       
       //search history...
-      length = data.History.length;
-      
-      for (p = 0; p < length; p++) {
+      var length4;
+      if(data.History ==undefined){
+          length4=0;
+      }else{
+        length4 = data.History.length;
+      }
+      for (p = 0; p < length4; p++) {
       
       var his = data.History[p];
 
@@ -407,9 +416,15 @@
           });
 
        //your student table construct....
-      length = data.student.length;
-      console.log(length);
-      for (p = 0; p < length; p++) {
+
+      var length2;
+      if(data.student == undefined){
+          length2=0;
+      }else{
+          length2 = data.student.length;
+        }
+      //console.log(length2);
+      for (p = 0; p < length2; p++) {
       
       courseID = data.student[p].courseID;
       instructor = data.student[p].instructors;
@@ -468,9 +483,16 @@
       });
 
        //your will table construct....
-      length = data.will.length;
-      console.log(length);
-      for (p = 0; p < length; p++) {
+      var length3;
+      if (data.will == undefined){
+        length3=0;
+      }else{
+        length3 = data.will.length;
+      }
+
+
+      console.log(length3);
+      for (p = 0; p < length3; p++) {
       
       courseID = data.will[p].courseID;
       instructor = data.will[p].instructors;

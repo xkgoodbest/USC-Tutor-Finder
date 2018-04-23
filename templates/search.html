@@ -190,6 +190,16 @@ function disp1(jsons) {
             $(this).html('<input type="text" placeholder="Search ' + title + '" />');
         });
         var table = $('#example').DataTable();
+
+    $("div#example_wrapper div#example_filter label input").on('keydown',function(ev) {
+      if (ev.keyCode == 13) {
+        var s = $("div#example_wrapper div#example_filter label input").val();
+        console.log(s);
+        upHist(this.value);
+
+      }
+    });
+
         table.columns().every(function() {
             var that = this;
 
@@ -198,13 +208,12 @@ function disp1(jsons) {
                 if (ev.keyCode == 13) {
                     console.log(this.value)
                     that.search(this.value).draw();
-                    upHist(this.value);
                 }
             });
         });
     });
-    var hid = document.getElementById("example_filter");
-    hid.style.visibility = "hidden";
+    //var hid = document.getElementById("example_filter");
+    //hid.style.visibility = "hidden";
 }
 $.ajax({
     type: "GET",

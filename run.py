@@ -238,7 +238,9 @@ def tutorDel():
 			tutor=tutorEmail.split('@')[0]
 			students=firebase1.get(tutor,'student')
 			for j in students.keys():
-				if students[j]['courseID']==courseID and students[j]['instructors']==courseID and students[j]['email']==my+"@usc.edu":
+				print j
+				if students[j]['courseID']==courseID and students[j]['instructors']==instructors and students[j]['email']==my+"@usc.edu":
+					print "1234",j
 					firebase1.delete(tutor+'/student',j)
 					break
 			firebase1.delete(my+'/tutor',i)
@@ -258,7 +260,7 @@ def stuDel():
 			stu=stuEmail.split('@')[0]
 			tutors=firebase1.get(stu,'tutor')
 			for j in tutors.keys():
-				if tutors[j]['courseID']==courseID and tutors[j]['instructors']==courseID and tutors[j]['email']==my+"@usc.edu":
+				if tutors[j]['courseID']==courseID and tutors[j]['instructors']==instructors and tutors[j]['email']==my+"@usc.edu":
 					firebase1.delete(stu+'/tutor',j)
 					break
 			firebase1.delete(my+'/student',i)

@@ -9,7 +9,8 @@
     <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
     
   </head>
-  <body style="width:100%;background:url('static/reset_pwd.jpg');background-size: cover;">
+
+  <body >
   	<script>
   		function confirmRST(){
   			var newPWD=document.getElementById("new").value;
@@ -50,24 +51,29 @@
   	</script>
 
 
-  <body class="login-bg">
-  	<div class="header">
+  <body class="login-bg" style="background:url('static/uscc.jpg'); background-size: cover;">
+  	<div class="header" style="background-color: rgb(64,124,170);">
 	     <div class="container">
 	        <div class="row">
 	           <div class="col-md-12">
 	              <div class="logo">
-	                 <h1><a href="#">USC Tutor Finder</a></h1>
+	                 <h1><a href="/">USC Tutor Finder</a></h1>
 	              </div>
 	           </div>
 	        </div>
 	     </div>
 	</div>
+	<!-- 
+<div style ="position:fixed; top: 20%; left: 32%; width: 400px; height: 100px;">
+<div class="box" style="opacity: 0.8; border: 1px solid black;filter: alpha(opacity=60);background-color: #ffffff;">
+  
+	-->
 
-	<div class="page-content container">
+	<div class="page-content container" >
 		<div class="row">
 			<div class="col-md-4 col-md-offset-4">
-				<div class="login-wrapper">
-			        <div class="box">
+				<div class="login-wrapper" style ="position:fixed; top: 20%; left: 32%; width: 400px; height: 100px;">
+			        <div class="box" style="opacity: 0.8; border: 1px solid black;filter: alpha(opacity=60);background-color: #ffffff;">
 			            <div class="content-wrap">
 			                <h6>Reset Password</h6>
 			                <input class="form-control" type="password" placeholder="Old Password" id="old">
@@ -95,4 +101,5 @@
 
   </body>
 </body>
+
 </html>

@@ -54,8 +54,22 @@ $.ajax({
     }
 });
 }
-</script>
+ $(document).on('click', '#show', function() {
+  //$('#password').get(0).type = 'text';
 
+    if ($('#inputPassword').get(0).type == "password") {
+
+          $('#inputPassword').get(0).type = 'text';
+         
+    } else {
+        
+            $('#inputPassword').get(0).type = 'password';
+    }
+  });
+</script>
+<div style ="position:fixed; top: 20%; left: 32%; width: 400px; height: 100px;">
+<div class="box" style="opacity: 0.8; border: 1px solid black;filter: alpha(opacity=60);background-color: #ffffff;">
+  
     <form class="form-signin">
       <a href="/"><img class="mb-4" src="/static/usc.png" alt="" width="72" height="72"></a>
       <h1 class="h3 mb-3 font-weight-normal">Please Sign Up</h1>
@@ -64,15 +78,18 @@ $.ajax({
       <label for="inputPassword" class="sr-only">Password</label>
       <input type="password" id="inputPassword" pattern=".{8,12}" required title="8 to 12 characters" class="form-control" placeholder="8 to 12 characters" required>
       <div class="checkbox mb-3">
-        <!--
+        
         <label>
-          <input type="checkbox" value="remember-me"> Remember me
+          <!--<input type="checkbox" value="remember-me"> Remember me-->
+          <input type="checkbox" id='show'>Show Password
         </label>
-      -->
+      
       </div>
       <button class="btn btn-lg btn-primary btn-block" onclick="writeUserData()" type="submit">Sign Up</button>
       
     </form>
+  </div>
+</div>
   </body>
 </body>
   </html>

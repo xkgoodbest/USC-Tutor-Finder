@@ -17,7 +17,7 @@
   			var oldPWD=document.getElementById("old").value;
   			var conPWD=document.getElementById("confirm").value;
   			if(newPWD.length<8 || oldPWD.length<8 || conPWD.length<8){
-  				alert("Old, new and confirming password must contain 8 characters at least")
+  				alert("Please check your input");
   			}
   			else{
   				$.post("/restPWD", {"oldPWD": oldPWD,"newPWD":newPWD,"conPWD":conPWD,"my":"{{session.username}}"},function(data)

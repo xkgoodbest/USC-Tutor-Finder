@@ -211,16 +211,17 @@ def willDel():
 	for i in wills.keys():
 		if wills[i]['courseID']==courseID and wills[i]['instructors']==instructors:
 			students=firebase1.get(my,'student');
-			for j in students.keys():
-				if students[j]['courseID']==courseID and students[j]['instructors']==instructors:
-					tutor=students[j]['email'].split('@')[0]
-					tutors=firebase1.get(tutor,'/tutor')
-					for k in tutors.keys():
-						if tutors[k]['courseID']==courseID and tutors[k]['instructors']==instructors and tutors[k]['email']==my+'@usc.edu':
-							firebase1.delete(tutor+'/tutor',k)
-							break
-					firebase1.delete(my+'/student',j)
-			firebase1.delete(my+'/will',i)
+			if students!=None:
+				for j in students.keys():
+					if students[j]['courseID']==courseID and students[j]['instructors']==instructors:
+						tutor=students[j]['email'].split('@')[0]
+						tutors=firebase1.get(tutor,'/tutor')
+						for k in tutors.keys():
+							if tutors[k]['courseID']==courseID and tutors[k]['instructors']==instructors and tutors[k]['email']==my+'@usc.edu':
+								firebase1.delete(tutor+'/tutor',k)
+								break
+						firebase1.delete(my+'/student',j)
+				firebase1.delete(my+'/will',i)
 			return "success"
 	return "fail"
 

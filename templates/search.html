@@ -195,7 +195,7 @@ function disp1(jsons) {
       if (ev.keyCode == 13) {
         var s = $("div#example_wrapper div#example_filter label input").val();
         console.log(s);
-        upHist(this.value);
+        upHist(s);
 
       }
     });
@@ -208,6 +208,7 @@ function disp1(jsons) {
                 if (ev.keyCode == 13) {
                     console.log(this.value)
                     that.search(this.value).draw();
+                    upHist(this.value);
                 }
             });
         });

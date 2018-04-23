@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link href="{{url_for('static',filename='styles/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{url_for('static',filename='styles/css/styles.css')}}" rel="stylesheet">
+       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
+    
   </head>
   <body style="width:100%;background:url('static/reset_pwd.jpg');background-size: cover;">
   	<script>
@@ -27,6 +30,23 @@
 			      });
   			}
   		}
+
+
+  $(document).on('click', '#show', function() {
+	//$('#password').get(0).type = 'text';
+
+    if ($('#old').get(0).type == "password") {
+
+        	$('#old').get(0).type = 'text';
+         	$('#new').get(0).type = 'text';
+          	$('#confirm').get(0).type = 'text';
+    } else {
+        	$('#old').get(0).type = 'password';
+         	$('#new').get(0).type = 'password';
+          	$('#confirm').get(0).type = 'password';
+    }
+	});
+
   	</script>
 
 
@@ -51,8 +71,11 @@
 			            <div class="content-wrap">
 			                <h6>Reset Password</h6>
 			                <input class="form-control" type="password" placeholder="Old Password" id="old">
+		
 			                <input class="form-control" type="password" placeholder="New Password" id="new">
+	
 			                <input class="form-control" type="password" placeholder="Confirm Password" id="confirm">
+							<input type="checkbox" id='show'>Show Password
 			                <div class="action">
 			                    
 			                    <a class="btn btn-primary signup" href="/profile" >Return to profile</a>
@@ -64,10 +87,12 @@
 			</div>
 		</div>
 	</div>
+<script type="text/javascript">
 
-    <script src="https://code.jquery.com/jquery.js"></script>
-    <script src="bootstrap/js/bootstrap.min.js"></script>
-    <script src="js/custom.js"></script>
+
+
+</script>
+
   </body>
 </body>
 </html>
